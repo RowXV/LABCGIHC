@@ -440,7 +440,6 @@ void CreateShaders()
 
 int main()
 {
-	printf("Prueba repo");
 	mainWindow = Window(1366, 768); // 1280, 1024 or 1024, 768
 	mainWindow.Initialise();
 
@@ -729,8 +728,8 @@ int main()
 
 		//PIRAMIDE DEL SOL
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-230.0f, 0.0f, 280.0f));
-		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
+		model = glm::translate(model, glm::vec3(-247.0f, 0.0f, 245.0f));
+		model = glm::scale(model, glm::vec3(8.0f, 8.0f, 8.0f));
 		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -919,7 +918,7 @@ int main()
 		//MOTO
 		//Chasis
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(55.0f, -1.0f, -85.0f));
+		model = glm::translate(model, glm::vec3(47.0f, -1.0f, -40.0f));
 		//model = glm::translate(model, glm::vec3(mainWindow.getmovimiento(), 0.0f, 0.0f));
 		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(1.3f, 1.3f, 1.3f));
@@ -947,59 +946,285 @@ int main()
 		MLl.RenderModel();
 
 		//*********************************************************************FAUNA**************************************************************************
+		//Animales por conjunto
+		int numAni = 3;
+		//Giro de animales
+		float anguloEntreAni = 90.0f;
 
-		//Pollo (1)
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-321.0f, 0.2f, 66.0f));
-		model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Pollo.RenderModel();
+		//Pollos
+		//Espacio entre cada Pollo
+		float distanciaEntrePollos = 2.0f;
 
-		//Oveja (2)
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-407.0f, 0.37f, 76.0f));
-		model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Oveja.RenderModel();
+		//Conjunto 1
+		for (int i = 0; i < numAni; ++i) {
 
-		//Crabmeat (3)
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(20.0f, -1.0f, 78.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Crabmeat.RenderModel();
+			for (int j = 0; j < numAni; ++j) {
+				model = glm::mat4(1.0);
+				//Ubicacion Oveja inicial
+				glm::vec3 polloPos = glm::vec3(110.0f, 0.2f, 138.0f);
+
+				//Ubicacion de Ovejas izquierda
+				polloPos.x = polloPos.x + i * distanciaEntrePollos;
+				polloPos.z = polloPos.z + j * distanciaEntrePollos;
+
+				model = glm::translate(model, polloPos);
+				model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
+				model = glm::rotate(model, (anguloEntreAni * j) * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+				model = glm::rotate(model, (anguloEntreAni * i) * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+				Pollo.RenderModel();
+			}
+		}
+
+		//Conjunto 2
+		for (int i = 0; i < numAni; ++i) {
+
+			for (int j = 0; j < numAni; ++j) {
+				model = glm::mat4(1.0);
+				//Ubicacion Pollo inicial
+				glm::vec3 polloPos = glm::vec3(283.0f, 0.2f, 344.0f);
+
+				//Ubicacion de Pollo izquierda
+				polloPos.x = polloPos.x + i * distanciaEntrePollos;
+				polloPos.z = polloPos.z + j * distanciaEntrePollos;
+
+				model = glm::translate(model, polloPos);
+				model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
+				model = glm::rotate(model, (anguloEntreAni * j) * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+				model = glm::rotate(model, (anguloEntreAni * i) * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+				Pollo.RenderModel();
+			}
+		}
+		
+		//Ovejas
+		//Espacio entre cada Oveja
+		float distanciaEntreOvejas = 4.0f;
+
+		//Conjunto 1
+		for (int i = 0; i < numAni; ++i) {
+
+			for (int j = 0; j < numAni; ++j) {
+				model = glm::mat4(1.0);
+				//Ubicacion Oveja inicial
+				glm::vec3 ovejaPos = glm::vec3(-454.0f, 0.37f, 95.0f);
+
+				//Ubicacion de Ovejas izquierda
+				ovejaPos.x = ovejaPos.x + i * distanciaEntreOvejas;
+				ovejaPos.z = ovejaPos.z + j * distanciaEntreOvejas;
+
+				model = glm::translate(model, ovejaPos);
+				model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
+				model = glm::rotate(model, (anguloEntreAni * j) * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+				model = glm::rotate(model, (anguloEntreAni * i) * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+				Oveja.RenderModel();
+			}
+		}
+		//Conjunto 2
+		for (int i = 0; i < numAni; ++i) {
+
+			for (int j = 0; j < numAni; ++j) {
+				model = glm::mat4(1.0);
+				//Ubicacion Oveja inicial
+				glm::vec3 ovejaPos = glm::vec3(143.0f, 0.37f, -138.0f);
+
+				//Ubicacion de Ovejas izquierda
+				ovejaPos.x = ovejaPos.x + i * distanciaEntreOvejas;
+				ovejaPos.z = ovejaPos.z + j * distanciaEntreOvejas;
+
+				model = glm::translate(model, ovejaPos);
+				model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
+				model = glm::rotate(model, (anguloEntreAni * j) * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+				model = glm::rotate(model, (anguloEntreAni * i) * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+				Oveja.RenderModel();
+			}
+		}
+
+		//Crabmeat
+		//6x6 = 36 crabmeats
+		int numCrab = 6;
+		// Espacio entre cada crab
+		float distanciaEntreCrab = 3.0f;
+		//Conjunto 1
+		for (int i = 0; i < numCrab; ++i) {
+
+			for (int j = 0; j < numCrab; ++j) {
+				//crabs 1
+				model = glm::mat4(1.0);
+				//Ubicacion de crab inicial
+				glm::vec3 crabPos = glm::vec3(480.0f, -0.5f, -29.5f);
+				
+				//Ubicacion de siguientes hongos
+				crabPos.x = crabPos.x + i * distanciaEntreCrab;
+				crabPos.z = crabPos.z + j * distanciaEntreCrab;
+
+				model = glm::translate(model, crabPos);
+				model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+				model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+				Crabmeat.RenderModel();
+			}
+		}
+
+		//Conjunto 2
+		for (int i = 0; i < numCrab+5; ++i) {
+
+			for (int j = 0; j < numCrab; ++j) {
+				//crabs 1
+				model = glm::mat4(1.0);
+				//Ubicacion de crab inicial
+				glm::vec3 crabPos = glm::vec3(-260.0f, -0.5f, 328.0f);
+
+				//Ubicacion de siguientes hongos
+				crabPos.x = crabPos.x + i * distanciaEntreCrab;
+				crabPos.z = crabPos.z + j * distanciaEntreCrab;
+
+				model = glm::translate(model, crabPos);
+				model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+				Crabmeat.RenderModel();
+			}
+		}
 
 		//**************************************************************************FLORA**************************************************************************
 
-		//FrutaHabilidad
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(301.0f, 0.2f, 154.0f));
-		model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		FruHa.RenderModel();
+		//FrutasHabilidad
+		//Número de frutas a crear
+		int numFrutas = 13;
+		// Espacio entre cada fruta en el eje z
+		float distanciaEntreFrutas = -10.0f;
 
-		//Palmera
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-118.0f, -0.75f, -103.0f));
-		model = glm::scale(model, glm::vec3(10.5f, 10.5f, 10.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Palmera.RenderModel();
+		for (int i = 0; i < numFrutas; ++i) {
+			
+			//Frutas Izquierda Camino
+			model = glm::mat4(1.0);
+			//Ubicacion de Fruta inicial
+			glm::vec3 frutaPos = glm::vec3(365.0f, 0.2f, 245.0f);
 
-		//Hongo
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(475.0f, -1.0f, 145.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		HongoM.RenderModel();
+			//Ubicacion de siguientes hongos
+			frutaPos.z = frutaPos.z + i * distanciaEntreFrutas;
+
+			model = glm::translate(model, frutaPos);
+			model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			FruHa.RenderModel();
+
+			if(i>2)
+			{
+				//Frutas Izquierda Camino
+				model = glm::mat4(1.0);
+				//Ubicacion de Fruta inicial
+				glm::vec3 frutaPos = glm::vec3(330.0f, 0.2f, 245.0f);
+
+				//Ubicacion de siguientes hongos
+				frutaPos.z = frutaPos.z + i * distanciaEntreFrutas;
+
+				model = glm::translate(model, frutaPos);
+				model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
+				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+				FruHa.RenderModel();
+			}
+		}
+
+		//Palmeras
+		//Número de palmeras a crear
+		int numPalmeras = 27;
+		//Espacio entre cada palmera en el eje x
+		float distanciaEntrePalmeras = -25.0f;
+
+		for (int i = 0; i < numPalmeras; ++i) {
+				//Palmeras Cruzando Calle
+				model = glm::mat4(1.0);
+				//Ubicacion de Palmera inicial
+				glm::vec3 palPos = glm::vec3(175.0f, -0.75f, -83.0f);
+
+				//Ubicacion de siguientes palmeras
+				palPos.x = palPos.x + i * distanciaEntrePalmeras;
+
+				model = glm::translate(model, palPos);
+				model = glm::scale(model, glm::vec3(10.5f, 10.5f, 10.5f));
+				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+				Palmera.RenderModel();
+			
+			//Palmeras Antes Calle 
+			if (i < 17)
+			{
+				model = glm::mat4(1.0);
+				//Ubicacion de Palmera inicial
+				glm::vec3 palPos = glm::vec3(175.0f, -0.75f, 62.0f);
+
+				//Ubicacion de siguientes palmeras
+				palPos.x = palPos.x + i * distanciaEntrePalmeras;
+
+				model = glm::translate(model, palPos);
+				model = glm::scale(model, glm::vec3(10.5f, 10.5f, 10.5f));
+				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+				Palmera.RenderModel();
+			}
+			else if (i > 17)
+			{
+				//Se quita la 18 y se continua con la 19
+				model = glm::mat4(1.0);
+				//Ubicacion de Palmera inicial
+				glm::vec3 palPos = glm::vec3(175.0f, -0.75f, 62.0f);
+
+				//Ubicacion de siguientes palmeras
+				palPos.x = palPos.x + i * distanciaEntrePalmeras;
+
+				model = glm::translate(model, palPos);
+				model = glm::scale(model, glm::vec3(10.5f, 10.5f, 10.5f));
+				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+				Palmera.RenderModel();
+			}
+		}
+
+		//Hongos
+		// Número de Hongos a crear
+		int numHongos = 92;
+		// Espacio entre cada hongo en el eje x
+		float distanciaEntreHongos = -5.0f;
+
+		for (int i = 0; i < numHongos; ++i) {
+			
+			//Hongos Antes Camino
+			model = glm::mat4(1.0);
+			//Ubicacion de Hongo inicial
+			glm::vec3 hongoPosB = glm::vec3(360.0f, -1.0f, 253.1f);
+
+			//Ubicacion de siguientes hongos
+			hongoPosB.x = hongoPosB.x + i * distanciaEntreHongos;
+
+			model = glm::translate(model, hongoPosB);
+			model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			HongoM.RenderModel();
+
+			if (i>5)  
+			{
+				//Hongos Cruzando Camino
+				model = glm::mat4(1.0);
+				//Ubicacion de Hongo inicial
+				glm::vec3 hongoPos = glm::vec3(360.0f, -1.0f, 221.0f);
+
+				//Ubicacion de siguientes hongos
+				hongoPos.x = hongoPos.x + i * distanciaEntreHongos;
+
+				model = glm::translate(model, hongoPos);
+				model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+				HongoM.RenderModel();
+			}
+
+		}
+
 
 		//**************************************************************************OBJETOS**************************************************************************
 
 		//Mineral (1)
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-248.0f, 18.5f, 325.0f));
+		model = glm::translate(model, glm::vec3(-248.0f, 29.3f, 300.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Mineral.RenderModel();
 
@@ -1057,7 +1282,7 @@ int main()
 
 		//Orbe Magico  (6)
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(479.0f, -0.5f, -22.0f));
+		model = glm::translate(model, glm::vec3(479.0f, 4.0f, -22.0f));
 		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Orbe.RenderModel();
@@ -1065,7 +1290,7 @@ int main()
 		//Checkpoint  (7)
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(143.0f, -0.0f, 237.0f));
-		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
+		model = glm::scale(model, glm::vec3(13.0f, 13.0f, 13.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Checkpoint.RenderModel();
 
@@ -1096,16 +1321,16 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Oro.RenderModel();
 
-		//Baculo
+		//Baculo (11)
 		model = glm::mat4(1.0);
 		//model = glm::translate(model, glm::vec3(129.0f, -0.0f, -101.0f));
-		model = glm::translate(model, glm::vec3(53.0f, -1.0f, -87.0f));
+		model = glm::translate(model, glm::vec3(305.0f, -1.0f, -75.7f));
 		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		model = glm::rotate(model, 20 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, 33 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Baculo.RenderModel();
 		
-		//Banca
+		//Banca (12)
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(201.0f, 0.0f, -58.0f));
 		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
