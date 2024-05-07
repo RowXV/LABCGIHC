@@ -440,6 +440,7 @@ void CreateShaders()
 
 int main()
 {
+	printf("Prueba repo");
 	mainWindow = Window(1366, 768); // 1280, 1024 or 1024, 768
 	mainWindow.Initialise();
 
