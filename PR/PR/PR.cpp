@@ -597,9 +597,9 @@ int main()
 	PSol = Model();
 	PSol.LoadModel("Models/PSol.obj");
 
-	/*PLuna = Model();
+	PLuna = Model();
 	PLuna.LoadModel("Models/ModelosAle/PLuna.obj");
-
+	/*
 	Altar = Model();
 	Altar.LoadModel("Models/ModelosAle/Altar.obj");*/
 
@@ -729,8 +729,8 @@ int main()
 
 		//PIRAMIDE DEL SOL
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-248.0f, 0.0f, 287.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		model = glm::translate(model, glm::vec3(-230.0f, 0.0f, 280.0f));
+		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
 		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -741,7 +741,19 @@ int main()
 		PSol.RenderModel();
 		glDisable(GL_BLEND);
 
-		//PIRAMIDE DEL SOL
+		//PIRAMIDE DE LA LUNA
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(380.0f, 0.0f, -10.0f));
+		model = glm::scale(model, glm::vec3(8.0f, 8.0f, 8.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		PLuna.RenderModel();
+		glDisable(GL_BLEND);
 
 		//ALTAR SOL
 
