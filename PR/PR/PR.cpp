@@ -487,8 +487,8 @@ int main()
 	Cofre = Model();
 	Cofre.LoadModel("Models/ModelosAle/cofre.obj");
 
-	/*CajaAnillo = Model();
-	CajaAnillo.LoadModel("Models/ModelosAle/ring_monitor.fbx");*/
+	CajaAnillo = Model();
+	CajaAnillo.LoadModel("Models/ModelosAle/ring_monitor.obj");
 
 	Oro = Model();
 	Oro.LoadModel("Models/ModelosAle/lingote_oro.obj");
@@ -1070,11 +1070,12 @@ int main()
 		glDisable(GL_BLEND);
 
 		//Caja anillo  (9)
-		/*model = glm::mat4(1.0);
+		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(-77.0f, -0.0f, 275.0f));
-		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
+		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		CajaAnillo.RenderModel();*/
+		CajaAnillo.RenderModel();
 
 		//Oro (10)
 		model = glm::mat4(1.0);
