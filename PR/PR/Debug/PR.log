@@ -5,7 +5,7 @@ C:\UNIVERSIDAD LOCAL\LAB COMPU GRAFICA\Proyecto\PR\PR\Window.h(12,36): warning C
 C:\UNIVERSIDAD LOCAL\LAB COMPU GRAFICA\Proyecto\PR\PR\Window.h(13,37): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
   (compilando archivo de origen "PR.cpp")
   
-C:\UNIVERSIDAD LOCAL\LAB COMPU GRAFICA\Proyecto\PR\PR\PR.cpp(713,24): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\UNIVERSIDAD LOCAL\LAB COMPU GRAFICA\Proyecto\PR\PR\PR.cpp(717,15): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\UNIVERSIDAD LOCAL\LAB COMPU GRAFICA\Proyecto\PR\PR\PR.cpp(719,33): warning C4244: '+=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\UNIVERSIDAD LOCAL\LAB COMPU GRAFICA\Proyecto\PR\PR\PR.cpp(714,24): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\UNIVERSIDAD LOCAL\LAB COMPU GRAFICA\Proyecto\PR\PR\PR.cpp(718,15): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\UNIVERSIDAD LOCAL\LAB COMPU GRAFICA\Proyecto\PR\PR\PR.cpp(720,33): warning C4244: '+=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
   PR.vcxproj -> C:\UNIVERSIDAD LOCAL\LAB COMPU GRAFICA\Proyecto\PR\Debug\PR.exe

@@ -675,13 +675,14 @@ int main()
 	unsigned int spotLightCount = 0;
 
 	//Primera luz Spotlight
-	/*potLights[0] = SpotLight(1.0f, 1.0f, 1.0f,
-		0.0f, 2.0f,
-		0.0f, 0.0f, 0.0f,
-		0.0f, -1.0f, 0.0f,
+	//*********************************+***LUZ DEL CARRO*************************************
+	spotLights[0] = SpotLight(1.0f, 1.0f, 1.0f,
+		1.0f, 2.0f,
+		0.0f, 3.0f, 0.0f,
 		1.0f, 0.0f, 0.0f,
-		5.0f);
-	spotLightCount++;*/
+		1.0f, 0.0003f, 0.0002f,
+		15.0f);
+	spotLightCount++;
 	
 	//Continuar para más luces
 
@@ -874,6 +875,17 @@ int main()
 			glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
 			glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 		}
+
+		//Movimiento de las luces
+		//Luces Bus
+		if (dirBus) {
+			spotLights[0].SetFlash(glm::vec3(movBus - 169.0f, 3.0f, 16.0f), glm::vec3(-1.0f, 0.0f, 0.0f));
+		}
+		else {
+			spotLights[0].SetFlash(glm::vec3(movBus - 109.0f, 3.0f, 16.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		}
+		
+
 
 		//información al shader de fuentes de iluminación
 		shaderList[0].SetDirectionalLight(&mainLight);
