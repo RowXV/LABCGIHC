@@ -676,9 +676,17 @@ int main()
 
 	//Primera luz Spotlight
 	//*********************************+***LUZ DEL CARRO*************************************
-	spotLights[0] = SpotLight(1.0f, 1.0f, 1.0f,
+	spotLights[0] = SpotLight(0.3f, 0.3f, 1.0f,
 		1.0f, 2.0f,
-		0.0f, 3.0f, 0.0f,
+		0.0f, 0.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,
+		1.0f, 0.0003f, 0.0002f,
+		15.0f);
+	spotLightCount++;
+	//*********************************+***LUZ DEL VOCHO*************************************
+	spotLights[1] = SpotLight(1.0f, 1.0f, 0.3f,
+		1.0f, 2.0f,
+		0.0f, 0.0f, 0.0f,
 		1.0f, 0.0f, 0.0f,
 		1.0f, 0.0003f, 0.0002f,
 		15.0f);
@@ -883,6 +891,14 @@ int main()
 		}
 		else {
 			spotLights[0].SetFlash(glm::vec3(movBus - 109.0f, 3.0f, 16.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		}
+
+
+		if (dirVoch) {
+			spotLights[1].SetFlash(glm::vec3(movVoch - 366.0f, 3.0f, -42.0f), glm::vec3(-1.0f, 0.0f, 0.0f));
+		}
+		else {
+			spotLights[1].SetFlash(glm::vec3(movVoch - 346.0f, 3.0f, -42.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		}
 		
 
