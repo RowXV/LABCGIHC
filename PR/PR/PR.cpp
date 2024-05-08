@@ -36,12 +36,42 @@ Proyecto
 #include "Material.h"
 const float toRadians = 3.14159265f / 180.0f;
 
+//Variables
+float terceraSonic = 25.0f; // Distancia de camara
+float terceraDepresso = 20.0f; // Distancia de camara
+
+int numAni = 3;//Animales por conjunto
+float anguloEntreAni = 90.0f; //Giro de animales
+
+float distanciaEntrePollos = 2.0f;//Espacio entre cada Pollo
+float distanciaEntreOvejas = 4.0f;//Espacio entre cada Oveja
+float distanciaEntreCrab = 3.0f;// Espacio entre cada crab
+float distanciaEntreFrutas = -10.0f;// Espacio entre cada fruta en el eje z
+float distanciaEntreHongos = -5.0f;// Espacio entre cada hongo en el eje x
+float distanciaEntrePalmeras = -25.0f;//Espacio entre cada palmera en el eje x
+
+int numCrab = 6;//6x6 = 36 crabmeats
+int numFrutas = 13;//Número de frutas a crear
+int numPalmeras = 27;//Número de palmeras a crear
+int numHongos = 92;// Número de Hongos a crear
+
+//Variables animacion
+float movZigZag = 0.0f;
+float movVert = 0.0f;
+float movOffset = 0.0f;
+bool dir = true;
+
+
+
+
 Window mainWindow;
 std::vector<Mesh*> meshList;
 std::vector<Shader> shaderList;
 
+//Camaras
 Camera camera;
-
+Camera depresso;
+Camera sonic;
 
 //Texturas a utilizar en entorno opengl
 //Texture "nombre";
@@ -440,7 +470,6 @@ void CreateShaders()
 
 int main()
 {
-	printf("Prueba repo");
 	mainWindow = Window(1366, 768); // 1280, 1024 or 1024, 768
 	mainWindow.Initialise();
 
@@ -448,7 +477,9 @@ int main()
 	CrearBanca1();
 	CreateShaders();
 
-	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.3f, 0.5f);
+	camera = Camera(glm::vec3(0.0f, 200.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, -90.0f, 0.3f, 0.5f);
+	depresso = Camera(glm::vec3(-220.0f, 9.0f, 61.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 0.3f, 0.5f);
+	sonic = Camera(glm::vec3(201.0f, 10.0f, 27.0f), glm::vec3(0.0f, 1.0f, 0.0f), 180.0f, 0.0f, 0.3f, 0.5f);
 
 
 	//********************************CARGA DE TEXTURAS*************************************
@@ -665,6 +696,9 @@ int main()
 	sp.init(); //inicializar esfera
 	sp.load();//enviar la esfera al shader
 
+	movOffset = 0.05f;
+	lastTime = glfwGetTime(); //Para empezar lo más cercano posible a 0
+
 	while (!mainWindow.getShouldClose())
 	{
 		GLfloat now = glfwGetTime();
@@ -672,15 +706,68 @@ int main()
 		deltaTime += (now - lastTime) / limitFPS;
 		lastTime = now;
 
+		//Algoritmos de animacion
+		movZigZag += 5.0f * deltaTime;
+
+		if (dir == true)
+		{
+			movVert += movOffset * deltaTime;
+			
+			if (movVert > 8.0f)
+			{
+				dir = false;
+			}
+		}
+		else if (dir == false)
+		{
+			movVert -= movOffset * deltaTime;
+			if (movVert < 0.0f)
+			{
+				dir = true;
+			}
+		}
+		
+
 		//Recibir eventos del usuario
 		glfwPollEvents();
-		camera.keyControl(mainWindow.getsKeys(), deltaTime);
-		camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
 
+		//Camaras y controles asignados
+		if (mainWindow.getopcion() == 0.0f)
+		{
+			depresso.keyControlDep(mainWindow.getsKeys(), deltaTime);
+			depresso.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
+			
+		}
+		else if (mainWindow.getopcion() == 1.0f)
+		{
+			sonic.keyControlSon(mainWindow.getsKeys(), deltaTime);
+			sonic.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
+		}
+		else if (mainWindow.getopcion() == 2.0f)
+		{
+			camera.keyControl(mainWindow.getsKeys(), deltaTime);
+
+		}
+		
 		// Clear the window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		skybox.DrawSkybox(camera.calculateViewMatrix(), projection);
+		
+
+		if (mainWindow.getopcion() == 0.0f)
+		{
+			skybox.DrawSkybox(depresso.calculateViewMatrix(), projection);
+		}
+		else if (mainWindow.getopcion() == 1.0f)
+		{
+			skybox.DrawSkybox(sonic.calculateViewMatrix(), projection);
+		}
+		else if (mainWindow.getopcion() == 2.0f)
+		{
+			skybox.DrawSkybox(camera.calculateViewMatrix(), projection);
+		}
+
+
 		shaderList[0].UseShader();
 		uniformModel = shaderList[0].GetModelLocation();
 		uniformProjection = shaderList[0].GetProjectionLocation();
@@ -693,14 +780,31 @@ int main()
 		uniformShininess = shaderList[0].GetShininessLocation();
 
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
-		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
-		glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
+
+
+		if (mainWindow.getopcion() == 0.0f)
+		{
+			glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(depresso.calculateViewMatrix()));
+			glUniform3f(uniformEyePosition, depresso.getCameraPosition().x, depresso.getCameraPosition().y, depresso.getCameraPosition().z);
+		}
+		else if (mainWindow.getopcion() == 1.0f)
+		{
+			glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(sonic.calculateViewMatrix()));
+			glUniform3f(uniformEyePosition, sonic.getCameraPosition().x, sonic.getCameraPosition().y, sonic.getCameraPosition().z);
+		}
+		else if (mainWindow.getopcion() == 2.0f)
+		{
+			
+			glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
+			glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
+			//camera.getCameraDirection() = glm::vec3(0.0f, -1.0f, 0.0f);
+		}
 
 		// luz ligada a la cámara de tipo flash
 		//sirve para que en tiempo de ejecución (dentro del while) se cambien propiedades de la luz
-		glm::vec3 lowerLight = camera.getCameraPosition();
+		/*glm::vec3 lowerLight = camera.getCameraPosition();
 		lowerLight.y -= 0.3f;
-		spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
+		spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());*/
 
 		//información al shader de fuentes de iluminación
 		shaderList[0].SetDirectionalLight(&mainLight);
@@ -729,8 +833,8 @@ int main()
 
 		//PIRAMIDE DEL SOL
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-230.0f, 0.0f, 280.0f));
-		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
+		model = glm::translate(model, glm::vec3(-247.0f, 0.0f, 245.0f));
+		model = glm::scale(model, glm::vec3(8.0f, 8.0f, 8.0f));
 		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -763,79 +867,98 @@ int main()
 		
 		//DEPRESSO
 		//Cuerpo
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-220.0f, 1.8f, 61.0f));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		modelaux = model;
+		glm::vec3 camaraDepresso = depresso.getCameraDirection();
+		glm::vec3 depressoPos = depresso.getCameraPosition() + terceraDepresso * camaraDepresso;
+		depressoPos.y -= 6.0f;
 
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, depressoPos);
+		model = glm::rotate(model, -180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(mainWindow.getgiroIzDepress()), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(mainWindow.getgiroDeDepress()), glm::vec3(0.0f, 1.0f, 0.0f));
+
+		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		DCu.RenderModel();
 
 		//Brazo Izquierdo
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(0.8f, 0.6f, 0.8f));
+		model = glm::rotate(model, glm::radians(mainWindow.getmovDepress()), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(mainWindow.getmovDepress()), glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		DBIz.RenderModel();
 
 		//Brazo Derecho
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(-0.6f, 0.6f, 0.9f));
+		model = glm::rotate(model, glm::radians(-mainWindow.getmovDepress()), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(-mainWindow.getmovDepress()), glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		DBDe.RenderModel();
 
 		//Pierna Izquierda
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(0.4f, -0.6f, 0.8f));
-		
+		model = glm::rotate(model, glm::radians(mainWindow.getmovDepress()), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(mainWindow.getmovDepress()), glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		DPIz.RenderModel();
 
 		//Pierna Derecha
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(-0.4f, -0.8f, 0.8f));
+		model = glm::rotate(model, glm::radians(-mainWindow.getmovDepress()), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(-mainWindow.getmovDepress()), glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		DPDe.RenderModel();
 
 		//SONIC
 		//Cuerpo
+		glm::vec3 camaraSonic = sonic.getCameraDirection();
+		glm::vec3 sonicPos = sonic.getCameraPosition() + terceraSonic * camaraSonic;
+		sonicPos.y -= 8.0f;
+
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(201.0f, 3.6f, 27.0f));
-		//model = glm::translate(model, glm::vec3(mainWindow.getmovimiento(), 0.0f, 0.0f)); //para hacer que se mueva el personaje
+		model = glm::translate(model, sonicPos);
 		model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		model = glm::rotate(model, glm::radians(mainWindow.getgiroIzSonic()), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(mainWindow.getgiroDeSonic()), glm::vec3(0.0f, 1.0f, 0.0f));
+
+		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		SCu.RenderModel(); //variable con el modelo del cuerpo de la moto
-		modelaux = model;
+		
 
 		//Brazo izquierdo
 		model = modelaux; //reinicia la matriz auxiliar para la jerarquia
 		model = glm::translate(model, glm::vec3(0.1f, 0.4f, 0.8f));
-		//model = glm::rotate(model, glm::radians(mainWindow.getarticulacion1()), glm::vec3(0.0f, 0.0f, 1.0f)); //cambiar por otra articulación
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		model = glm::rotate(model, glm::radians(-mainWindow.getmovSonic()), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, glm::radians(-mainWindow.getmovSonic()), glm::vec3(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		SBIz.RenderModel();
 
 		//Brazo derecho
 		model = modelaux; //reinicia la matriz auxiliar para la jerarquia
 		model = glm::translate(model, glm::vec3(0.1f, 0.4f, -0.7f));
-		//model = glm::rotate(model, glm::radians(-mainWindow.getarticulacion1()), glm::vec3(0.0f, 0.0f, 1.0f)); //cambiar por otra articulación
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		model = glm::rotate(model, glm::radians(mainWindow.getmovSonic()), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, glm::radians(mainWindow.getmovSonic()), glm::vec3(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		SBDe.RenderModel();
 
 		//Pierna izquierda
 		model = modelaux; //reinicia la matriz auxiliar para la jerarquia
 		model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.3f));
-		//model = glm::rotate(model, glm::radians(-mainWindow.getarticulacion1()), glm::vec3(0.0f, 0.0f, 1.0f)); //cambiar por otra articulación
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		model = glm::rotate(model, glm::radians(mainWindow.getmovSonic()), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, glm::radians(mainWindow.getmovSonic()), glm::vec3(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		SPIz.RenderModel();
 
 		//Pierna derecha
 		model = modelaux; //reinicia la matriz auxiliar para la jerarquia
 		model = glm::translate(model, glm::vec3(0.0f, -1.0f, -0.3f));
-		//model = glm::rotate(model, glm::radians(mainWindow.getarticulacion1()), glm::vec3(0.0f, 0.0f, 1.0f)); //cambiar por otra articulación
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		model = glm::rotate(model, glm::radians(-mainWindow.getmovSonic()), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, glm::radians(-mainWindow.getmovSonic()), glm::vec3(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		SPDe.RenderModel();
 
@@ -919,7 +1042,7 @@ int main()
 		//MOTO
 		//Chasis
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(55.0f, -1.0f, -85.0f));
+		model = glm::translate(model, glm::vec3(47.0f, -1.0f, -40.0f));
 		//model = glm::translate(model, glm::vec3(mainWindow.getmovimiento(), 0.0f, 0.0f));
 		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(1.3f, 1.3f, 1.3f));
@@ -947,59 +1070,254 @@ int main()
 		MLl.RenderModel();
 
 		//*********************************************************************FAUNA**************************************************************************
+		//Pollos
+		//Conjunto 1
+		for (int i = 0; i < numAni; ++i) {
 
-		//Pollo (1)
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-321.0f, 0.2f, 66.0f));
-		model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Pollo.RenderModel();
+			for (int j = 0; j < numAni; ++j) {
+				model = glm::mat4(1.0);
+				//Ubicacion Oveja inicial
+				glm::vec3 polloPos = glm::vec3(110.0f, 0.2f, 138.0f);
 
-		//Oveja (2)
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-407.0f, 0.37f, 76.0f));
-		model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Oveja.RenderModel();
+				//Ubicacion de Ovejas izquierda
+				polloPos.x = polloPos.x + i * distanciaEntrePollos;
+				polloPos.z = polloPos.z + j * distanciaEntrePollos;
 
-		//Crabmeat (3)
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(20.0f, -1.0f, 78.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Crabmeat.RenderModel();
+				model = glm::translate(model, polloPos);
+				model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
+				model = glm::rotate(model, (anguloEntreAni * j) * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+				model = glm::rotate(model, (anguloEntreAni * i) * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+				Pollo.RenderModel();
+			}
+		}
+
+		//Conjunto 2
+		for (int i = 0; i < numAni; ++i) {
+
+			for (int j = 0; j < numAni; ++j) {
+				model = glm::mat4(1.0);
+				//Ubicacion Pollo inicial
+				glm::vec3 polloPos = glm::vec3(283.0f, 0.2f, 344.0f);
+
+				//Ubicacion de Pollo izquierda
+				polloPos.x = polloPos.x + i * distanciaEntrePollos;
+				polloPos.z = polloPos.z + j * distanciaEntrePollos;
+
+				model = glm::translate(model, polloPos);
+				model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
+				model = glm::rotate(model, (anguloEntreAni * j) * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+				model = glm::rotate(model, (anguloEntreAni * i) * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+				Pollo.RenderModel();
+			}
+		}
+		
+		//Ovejas
+		//Conjunto 1
+		for (int i = 0; i < numAni; ++i) {
+
+			for (int j = 0; j < numAni; ++j) {
+				model = glm::mat4(1.0);
+				//Ubicacion Oveja inicial
+				glm::vec3 ovejaPos = glm::vec3(-454.0f, 0.37f, 95.0f);
+
+				//Ubicacion de Ovejas izquierda
+				ovejaPos.x = ovejaPos.x + i * distanciaEntreOvejas;
+				ovejaPos.z = ovejaPos.z + j * distanciaEntreOvejas;
+
+				model = glm::translate(model, ovejaPos);
+				model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
+				model = glm::rotate(model, (anguloEntreAni * j) * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+				model = glm::rotate(model, (anguloEntreAni * i) * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+				Oveja.RenderModel();
+			}
+		}
+		//Conjunto 2
+		for (int i = 0; i < numAni; ++i) {
+
+			for (int j = 0; j < numAni; ++j) {
+				model = glm::mat4(1.0);
+				//Ubicacion Oveja inicial
+				glm::vec3 ovejaPos = glm::vec3(143.0f, 0.37f, -138.0f);
+
+				//Ubicacion de Ovejas izquierda
+				ovejaPos.x = ovejaPos.x + i * distanciaEntreOvejas;
+				ovejaPos.z = ovejaPos.z + j * distanciaEntreOvejas;
+
+				model = glm::translate(model, ovejaPos);
+				model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
+				model = glm::rotate(model, (anguloEntreAni * j) * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+				model = glm::rotate(model, (anguloEntreAni * i) * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+				Oveja.RenderModel();
+			}
+		}
+
+		//Crabmeat
+		//Conjunto 1
+		for (int i = 0; i < numCrab; ++i) {
+
+			for (int j = 0; j < numCrab; ++j) {
+				//crabs 1
+				model = glm::mat4(1.0);
+				//Ubicacion de crab inicial
+				glm::vec3 crabPos = glm::vec3(480.0f, -0.5f, -29.5f);
+				
+				//Ubicacion de siguientes hongos
+				crabPos.x = crabPos.x + i * distanciaEntreCrab;
+				crabPos.z = crabPos.z + j * distanciaEntreCrab;
+
+				model = glm::translate(model, crabPos);
+				model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+				model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+				Crabmeat.RenderModel();
+			}
+		}
+
+		//Conjunto 2
+		for (int i = 0; i < numCrab+5; ++i) {
+
+			for (int j = 0; j < numCrab; ++j) {
+				//crabs 1
+				model = glm::mat4(1.0);
+				//Ubicacion de crab inicial
+				glm::vec3 crabPos = glm::vec3(-260.0f, -0.5f, 328.0f);
+
+				//Ubicacion de siguientes hongos
+				crabPos.x = crabPos.x + i * distanciaEntreCrab;
+				crabPos.z = crabPos.z + j * distanciaEntreCrab;
+
+				model = glm::translate(model, crabPos);
+				model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+				Crabmeat.RenderModel();
+			}
+		}
 
 		//**************************************************************************FLORA**************************************************************************
 
-		//FrutaHabilidad
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(301.0f, 0.2f, 154.0f));
-		model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		FruHa.RenderModel();
+		//FrutasHabilidad
+		for (int i = 0; i < numFrutas; ++i) {
+			
+			//Frutas Izquierda Camino
+			model = glm::mat4(1.0);
+			//Ubicacion de Fruta inicial
+			glm::vec3 frutaPos = glm::vec3(365.0f, 0.2f, 245.0f);
 
-		//Palmera
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-118.0f, -0.75f, -103.0f));
-		model = glm::scale(model, glm::vec3(10.5f, 10.5f, 10.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Palmera.RenderModel();
+			//Ubicacion de siguientes hongos
+			frutaPos.z = frutaPos.z + i * distanciaEntreFrutas;
 
-		//Hongo
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(475.0f, -1.0f, 145.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		HongoM.RenderModel();
+			model = glm::translate(model, frutaPos);
+			model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			FruHa.RenderModel();
+
+			if(i>2)
+			{
+				//Frutas Izquierda Camino
+				model = glm::mat4(1.0);
+				//Ubicacion de Fruta inicial
+				glm::vec3 frutaPos = glm::vec3(330.0f, 0.2f, 245.0f);
+
+				//Ubicacion de siguientes hongos
+				frutaPos.z = frutaPos.z + i * distanciaEntreFrutas;
+
+				model = glm::translate(model, frutaPos);
+				model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
+				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+				FruHa.RenderModel();
+			}
+		}
+
+		//Palmeras
+		for (int i = 0; i < numPalmeras; ++i) {
+				//Palmeras Cruzando Calle
+				model = glm::mat4(1.0);
+				//Ubicacion de Palmera inicial
+				glm::vec3 palPos = glm::vec3(175.0f, -0.75f, -83.0f);
+
+				//Ubicacion de siguientes palmeras
+				palPos.x = palPos.x + i * distanciaEntrePalmeras;
+
+				model = glm::translate(model, palPos);
+				model = glm::scale(model, glm::vec3(10.5f, 10.5f, 10.5f));
+				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+				Palmera.RenderModel();
+			
+			//Palmeras Antes Calle 
+			if (i < 17)
+			{
+				model = glm::mat4(1.0);
+				//Ubicacion de Palmera inicial
+				glm::vec3 palPos = glm::vec3(175.0f, -0.75f, 62.0f);
+
+				//Ubicacion de siguientes palmeras
+				palPos.x = palPos.x + i * distanciaEntrePalmeras;
+
+				model = glm::translate(model, palPos);
+				model = glm::scale(model, glm::vec3(10.5f, 10.5f, 10.5f));
+				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+				Palmera.RenderModel();
+			}
+			else if (i > 17)
+			{
+				//Se quita la 18 y se continua con la 19
+				model = glm::mat4(1.0);
+				//Ubicacion de Palmera inicial
+				glm::vec3 palPos = glm::vec3(175.0f, -0.75f, 62.0f);
+
+				//Ubicacion de siguientes palmeras
+				palPos.x = palPos.x + i * distanciaEntrePalmeras;
+
+				model = glm::translate(model, palPos);
+				model = glm::scale(model, glm::vec3(10.5f, 10.5f, 10.5f));
+				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+				Palmera.RenderModel();
+			}
+		}
+
+		//Hongos
+		for (int i = 0; i < numHongos; ++i) {
+			
+			//Hongos Antes Camino
+			model = glm::mat4(1.0);
+			//Ubicacion de Hongo inicial
+			glm::vec3 hongoPosB = glm::vec3(360.0f, -1.0f, 253.1f);
+
+			//Ubicacion de siguientes hongos
+			hongoPosB.x = hongoPosB.x + i * distanciaEntreHongos;
+
+			model = glm::translate(model, hongoPosB);
+			model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			HongoM.RenderModel();
+
+			if (i>5)  
+			{
+				//Hongos Cruzando Camino
+				model = glm::mat4(1.0);
+				//Ubicacion de Hongo inicial
+				glm::vec3 hongoPos = glm::vec3(360.0f, -1.0f, 221.0f);
+
+				//Ubicacion de siguientes hongos
+				hongoPos.x = hongoPos.x + i * distanciaEntreHongos;
+
+				model = glm::translate(model, hongoPos);
+				model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+				HongoM.RenderModel();
+			}
+
+		}
 
 		//**************************************************************************OBJETOS**************************************************************************
 
 		//Mineral (1)
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-248.0f, 18.5f, 325.0f));
+		model = glm::translate(model, glm::vec3(-248.0f, 29.3f, 300.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Mineral.RenderModel();
 
@@ -1056,8 +1374,9 @@ int main()
 		PalBall.RenderModel();
 
 		//Orbe Magico  (6)
+
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(479.0f, -0.5f, -22.0f));
+		model = glm::translate(model, glm::vec3(479.0f, 4.0f+movVert, -22.0f + sin(glm::radians(movZigZag))));
 		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Orbe.RenderModel();
@@ -1065,7 +1384,7 @@ int main()
 		//Checkpoint  (7)
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(143.0f, -0.0f, 237.0f));
-		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
+		model = glm::scale(model, glm::vec3(13.0f, 13.0f, 13.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Checkpoint.RenderModel();
 
@@ -1096,16 +1415,16 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Oro.RenderModel();
 
-		//Baculo
+		//Baculo (11)
 		model = glm::mat4(1.0);
 		//model = glm::translate(model, glm::vec3(129.0f, -0.0f, -101.0f));
-		model = glm::translate(model, glm::vec3(53.0f, -1.0f, -87.0f));
+		model = glm::translate(model, glm::vec3(305.0f, -1.0f, -75.7f));
 		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		model = glm::rotate(model, 20 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, 33 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Baculo.RenderModel();
 		
-		//Banca
+		//Banca (12)
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(201.0f, 0.0f, -58.0f));
 		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
