@@ -25,16 +25,8 @@ public:
 	GLfloat getgiroDeSonic() { return giroDeSonic; }
 	GLfloat getmovSonic() { return movSonic; }
 
-
+	//Camara
 	GLfloat getopcion() { return opcion; }
-
-	////Movimiento vehiculos
-	//GLfloat getmuevex() { return muevex; }
-	//GLfloat getmuevex() { return muevex; }
-	//GLfloat getmuevex() { return muevex; }
-
-	////Movimiento Orbe
-	//GLfloat getmuevex() { return muevex; }
 
 	bool getShouldClose() {
 		return  glfwWindowShouldClose(mainWindow);}
@@ -65,16 +57,6 @@ private:
 	GLfloat movSonic;
 	//Camara opcion
 	GLfloat opcion;
-
-
-	////Movimiento Vehiculos
-	//GLfloat mueveDepress;
-	//GLfloat mueveDepress;
-	//GLfloat mueveDepress;
-
-	////Movimiento Orbe
-	//GLfloat mueveDepress;
-
 
 	bool mouseFirstMoved;
 	static void ManejaTeclado(GLFWwindow* window, int key, int code, int action, int mode);
