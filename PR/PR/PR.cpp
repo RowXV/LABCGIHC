@@ -643,12 +643,13 @@ int main()
 	Altar.LoadModel("Models/ModelosAle/Altar.obj");*/
 
 	std::vector<std::string> skyboxFaces;
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_rt.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_lf.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_dn.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_up.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_bk.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_ft.tga");
+
+	skyboxFaces.push_back("Textures/Skybox/skybox_3.tga"); //right
+	skyboxFaces.push_back("Textures/Skybox/skybox_1.tga"); //left
+	skyboxFaces.push_back("Textures/Skybox/skybox_6.tga"); //down
+	skyboxFaces.push_back("Textures/Skybox/skybox_5.tga"); //up
+	skyboxFaces.push_back("Textures/Skybox/skybox_2.tga"); //front
+	skyboxFaces.push_back("Textures/Skybox/skybox_4.tga"); //bh
 
 	skybox = Skybox(skyboxFaces);
 
