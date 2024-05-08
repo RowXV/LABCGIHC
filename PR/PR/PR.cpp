@@ -55,14 +55,32 @@ int numFrutas = 13;//Número de frutas a crear
 int numPalmeras = 27;//Número de palmeras a crear
 int numHongos = 92;// Número de Hongos a crear
 
-//Variables animacion
+//Variables animacion 
 float movZigZag = 0.0f;
 float movVert = 0.0f;
-float movOffset = 0.0f;
+float movOffset;
 bool dir = true;
 
+float movVoch;
+float movVochOffset;
+float giraVoch;
+float rotllVoch;
+float rotllVochOffset;
+bool dirVoch = true;
 
+float movBus;
+float movBusOffset;
+float giraBus;
+float rotllBus;
+float rotllBusOffset;
+bool dirBus = true;
 
+float movMoto;
+float movMotoOffset;
+float giraMoto;
+float rotllMoto;
+float rotllMotoOffset;
+bool dirMoto = true;
 
 Window mainWindow;
 std::vector<Mesh*> meshList;
@@ -102,7 +120,6 @@ Model Baculo;
 Model HongoM;
 
 //Vehiculos
-
 //Vochito
 Model VCha;
 Model VCof;
@@ -137,8 +154,7 @@ Model SBIz;
 Model SPDe;
 Model SPIz;
 
-
-//Edificacion
+//Edificaciones
 Model PSol;
 Model PLuna;
 Model Altar;
@@ -151,8 +167,6 @@ Skybox skybox;
 //Material "nombre";
 Material Material_brillante;
 Material Material_opaco;
-
-Sphere sp = Sphere(1.0, 20, 20); //recibe radio, slices, stacks
 
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
@@ -466,8 +480,6 @@ void CreateShaders()
 	shaderList.push_back(*shader1);
 }
 
-
-
 int main()
 {
 	mainWindow = Window(1366, 768); // 1280, 1024 or 1024, 768
@@ -481,7 +493,6 @@ int main()
 	depresso = Camera(glm::vec3(-220.0f, 9.0f, 61.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 0.3f, 0.5f);
 	sonic = Camera(glm::vec3(201.0f, 10.0f, 27.0f), glm::vec3(0.0f, 1.0f, 0.0f), 180.0f, 0.0f, 0.3f, 0.5f);
 
-
 	//********************************CARGA DE TEXTURAS*************************************
 	pisoTexture = Texture("Textures/piso.tga");
 	pisoTexture.LoadTextureA();
@@ -489,7 +500,6 @@ int main()
 	//Textura de la banca
 	banca1Texture = Texture("Textures/piedra_banca.png");
 	banca1Texture.LoadTextureA(); 
-
 
 	//********************************CARGA DE MODELOS*************************************
 	//Objetos
@@ -508,7 +518,6 @@ int main()
 	Motobug = Model();
 	Motobug.LoadModel("Models/ModelosAle/motobug.obj");
 
-	
 	Checkpoint = Model();
 	Checkpoint.LoadModel("Models/ModelosAle/checkpoint.obj");
 
@@ -526,7 +535,6 @@ int main()
 
 	Baculo = Model();
 	Baculo.LoadModel("Models/ModelosAle/baculo.obj");
-	
 	
 	//FLORA
 	FruHa = Model();
@@ -591,7 +599,7 @@ int main()
 	MLl = Model();
 	MLl.LoadModel("Models/ModelosAle/moto_llanta.obj");
 
-	//Personaje
+	//Personajes
 	//Depresso
 	DCu = Model();
 	DCu.LoadModel("Models/DCu.obj");
@@ -624,7 +632,7 @@ int main()
 	SPIz = Model();
 	SPIz.LoadModel("Models/ModelosAle/sonic_pierna_izquierda.obj");
 
-	//Edificacion
+	//Edificaciones
 	PSol = Model();
 	PSol.LoadModel("Models/PSol.obj");
 
@@ -647,7 +655,6 @@ int main()
 	Material_brillante = Material(4.0f, 256);
 	Material_opaco = Material(0.3f, 4);
 
-
 	//luz direccional, sólo 1 y siempre debe de existir
 	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
 		0.3f, 0.3f,
@@ -667,22 +674,13 @@ int main()
 	unsigned int spotLightCount = 0;
 
 	//Primera luz Spotlight
-	spotLights[0] = SpotLight(1.0f, 1.0f, 1.0f,
+	/*potLights[0] = SpotLight(1.0f, 1.0f, 1.0f,
 		0.0f, 2.0f,
 		0.0f, 0.0f, 0.0f,
 		0.0f, -1.0f, 0.0f,
 		1.0f, 0.0f, 0.0f,
 		5.0f);
-	spotLightCount++;
-
-	////Segunda luz Spotlight
-	//spotLights[1] = SpotLight(0.0f, 1.0f, 0.0f,
-	//	1.0f, 2.0f,
-	//	5.0f, 10.0f, 0.0f,
-	//	0.0f, -5.0f, 0.0f,
-	//	1.0f, 0.0f, 0.0f,
-	//	15.0f);
-	//spotLightCount++;
+	spotLightCount++;*/
 	
 	//Continuar para más luces
 
@@ -693,10 +691,24 @@ int main()
 	
 	//Loop mientras no se cierra la ventana
 	
-	sp.init(); //inicializar esfera
-	sp.load();//enviar la esfera al shader
-
+	//Variables para animacion de vehiculos
 	movOffset = 0.05f;
+
+	movVoch=0.0f;
+	movVochOffset = 0.7f;
+	rotllVoch = 0.0f;
+	rotllVochOffset = 3.5f;
+
+	movMoto = 0.0f;
+	movMotoOffset = 0.7f;
+	rotllMoto = 0.0f;
+	rotllMotoOffset = 3.5f;
+
+	movBus = 0.0f;
+	movBusOffset = 0.7f;
+	rotllBus = 0.0f;
+	rotllBusOffset = 3.5f;
+
 	lastTime = glfwGetTime(); //Para empezar lo más cercano posible a 0
 
 	while (!mainWindow.getShouldClose())
@@ -707,8 +719,8 @@ int main()
 		lastTime = now;
 
 		//Algoritmos de animacion
+		//Animacion Compleja Orbe
 		movZigZag += 5.0f * deltaTime;
-
 		if (dir == true)
 		{
 			movVert += movOffset * deltaTime;
@@ -727,7 +739,71 @@ int main()
 			}
 		}
 		
-
+		//Animacion Basica Vehiculos
+		//Vocho
+		if (dirVoch == true)
+		{
+			movVoch -= movVochOffset * deltaTime;
+			rotllVoch += rotllVochOffset * deltaTime;
+			if (movVoch <= -130.0f)
+			{
+					dirVoch = false;
+					giraVoch = 180.0f;
+			}
+		}
+		else
+		{
+			movVoch += movVochOffset * deltaTime;
+			rotllVoch += rotllVochOffset * deltaTime;
+			if (movVoch >= 160.0f)
+			{
+					dirVoch = true;
+					giraVoch = 0.0f;
+			}
+		}
+		//Moto
+		if (dirMoto == true)
+		{
+			movMoto += movMotoOffset * deltaTime;
+			rotllMoto += rotllMotoOffset * deltaTime;
+			if (movMoto >= 100.0f)
+			{
+				dirMoto = false;
+				giraMoto = 180.0f;
+			}
+		}
+		else
+		{
+			movMoto -= movMotoOffset * deltaTime;
+			rotllMoto += rotllMotoOffset * deltaTime;
+			if (movMoto <= -150.0f)
+			{
+				dirMoto = true;
+				giraMoto = 0.0f;
+			}
+		}
+		//Bus
+		if (dirBus == true)
+		{
+			movBus -= movBusOffset * deltaTime;
+			rotllBus += rotllBusOffset * deltaTime;
+			if (movBus <= -320.0f)
+			{
+				dirBus = false;
+				giraBus = 180.0f;
+			}
+		}
+		else
+		{
+			movBus += movBusOffset * deltaTime;
+			rotllBus += rotllBusOffset * deltaTime;
+			if (movBus >= 250.0f)
+			{
+				dirBus = true;
+				giraBus = 0.0f;
+			}
+		}
+		
 		//Recibir eventos del usuario
 		glfwPollEvents();
 
@@ -745,15 +821,15 @@ int main()
 		}
 		else if (mainWindow.getopcion() == 2.0f)
 		{
+			//Para solo mover con teclado sin mouse
 			camera.keyControl(mainWindow.getsKeys(), deltaTime);
-
 		}
 		
 		// Clear the window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-
+		//Para cambiar entre camaras
 		if (mainWindow.getopcion() == 0.0f)
 		{
 			skybox.DrawSkybox(depresso.calculateViewMatrix(), projection);
@@ -766,7 +842,6 @@ int main()
 		{
 			skybox.DrawSkybox(camera.calculateViewMatrix(), projection);
 		}
-
 
 		shaderList[0].UseShader();
 		uniformModel = shaderList[0].GetModelLocation();
@@ -781,7 +856,7 @@ int main()
 
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
 
-
+		//Cambiar entre camaras y su posicion
 		if (mainWindow.getopcion() == 0.0f)
 		{
 			glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(depresso.calculateViewMatrix()));
@@ -797,26 +872,18 @@ int main()
 			
 			glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
 			glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
-			//camera.getCameraDirection() = glm::vec3(0.0f, -1.0f, 0.0f);
 		}
-
-		// luz ligada a la cámara de tipo flash
-		//sirve para que en tiempo de ejecución (dentro del while) se cambien propiedades de la luz
-		/*glm::vec3 lowerLight = camera.getCameraPosition();
-		lowerLight.y -= 0.3f;
-		spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());*/
 
 		//información al shader de fuentes de iluminación
 		shaderList[0].SetDirectionalLight(&mainLight);
 		shaderList[0].SetPointLights(pointLights, pointLightCount);
 		shaderList[0].SetSpotLights(spotLights, spotLightCount);
 
-
-
 		glm::mat4 model(1.0);
 		glm::mat4 modelaux(1.0);
 		glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
 
+		//**************************************************************************PISO**************************************************************************
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(50.0f, 1.0f, 50.0f));
@@ -828,7 +895,6 @@ int main()
 
 		meshList[2]->RenderMesh();
 
-		
 		//**************************************************************************EDIFICACIONES**************************************************************************
 
 		//PIRAMIDE DEL SOL
@@ -929,7 +995,6 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		SCu.RenderModel(); //variable con el modelo del cuerpo de la moto
 		
-
 		//Brazo izquierdo
 		model = modelaux; //reinicia la matriz auxiliar para la jerarquia
 		model = glm::translate(model, glm::vec3(0.1f, 0.4f, 0.8f));
@@ -962,13 +1027,14 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		SPDe.RenderModel();
 
-
 		//**************************************************************************AUTOMOVILES**************************************************************************
 
 		//VOCHITO
 		//Chasis
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-356.0f, 3.0f, -42.0f));
+		model = glm::translate(model, glm::vec3(movVoch-356.0f, 3.0f, -42.0f));
+		model = glm::rotate(model, glm::radians(giraVoch), glm::vec3(0.0f, 1.0f, 0.0f));
+		
 		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
 		modelaux = model;
 
@@ -984,31 +1050,38 @@ int main()
 		//Llanta Delantera Izquierda
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(-11.5f, -4.3f, 7.3f));
+		model = glm::rotate(model, rotllVoch * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		VLlDIz.RenderModel();
 
 		//Llanta Delantera Derecha
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(-11.5f, -4.3f, -7.5f));
+		model = glm::rotate(model, -rotllVoch * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		VLlDDe.RenderModel();
 
 		//Llanta Trasera Izquierda
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(14.0f, -4.3f, 7.0f));
+		model = glm::rotate(model, rotllVoch * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		VLlTIz.RenderModel();
 
 		//Llanta Trasera Derecha
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(14.0f, -4.3f, -7.0f));
+		model = glm::rotate(model, -rotllVoch * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		VLlTDe.RenderModel();
 
 		//AUTOBUS
 		//Chasis
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(139.0f, 4.0f, 16.0f));
+		model = glm::translate(model, glm::vec3(movBus - 139.0f, 4.0f, 16.0f));
+		model = glm::rotate(model, glm::radians(giraBus), glm::vec3(0.0f, 1.0f, 0.0f));
+
 		model = glm::scale(model, glm::vec3(5.5f, 5.5f, 5.5f));
 		modelaux = model;
 
@@ -1018,33 +1091,37 @@ int main()
 		//Llanta Delantera Izquierda
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(-2.43f, -0.55f, 0.9f));
+		model = glm::rotate(model, rotllBus * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		ALlDIz.RenderModel();
 
 		//Llanta Delantera Derecha
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(-2.43f, -0.55f, -0.8f));
+		model = glm::rotate(model, rotllBus * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		ALlDDe.RenderModel();
 
 		//Llanta Trasera Izquierda
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(2.43f, -0.55f, 0.9f));
+		model = glm::rotate(model, rotllBus * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		ALlTIz.RenderModel();
 
 		//Llanta Trasera Derecha
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(2.43f, -0.55f, -0.8f));
+		model = glm::rotate(model, rotllBus * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		ALlTDe.RenderModel();
 
 		//MOTO
 		//Chasis
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(47.0f, -1.0f, -40.0f));
-		//model = glm::translate(model, glm::vec3(mainWindow.getmovimiento(), 0.0f, 0.0f));
-		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(movMoto+47.0f, -1.0f, -40.0f));		
+		model = glm::rotate(model, glm::radians(giraMoto-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
 		model = glm::scale(model, glm::vec3(1.3f, 1.3f, 1.3f));
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -1055,8 +1132,7 @@ int main()
 		model = modelaux;
 		color = glm::vec3(1.0f, 1.0f, 1.0f);
 		model = glm::translate(model, glm::vec3(0.0f, 0.8f, -2.4f)); //mueve la llanta hacia abajo
-		//model = glm::rotate(model, glm::radians(mainWindow.getarticulacion2()), glm::vec3(1.0f, 0.0f, 0.0f)); //articulacion de la llanta
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		model = glm::rotate(model, -rotllMoto * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));		
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		MLl.RenderModel(); //variable con el modelo de una sola llanta
 
@@ -1064,12 +1140,12 @@ int main()
 		model = modelaux;
 		color = glm::vec3(1.0f, 1.0f, 1.0f);
 		model = glm::translate(model, glm::vec3(0.0f, 0.8f, 2.4f)); //mueve la llanta hacia abajo
-		//model = glm::rotate(model, glm::radians(mainWindow.getarticulacion2()), glm::vec3(1.0f, 0.0f, 0.0f)); //articulacion de la llanta
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		model = glm::rotate(model, -rotllMoto * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));		
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		MLl.RenderModel();
 
 		//*********************************************************************FAUNA**************************************************************************
+		
 		//Pollos
 		//Conjunto 1
 		for (int i = 0; i < numAni; ++i) {
@@ -1091,7 +1167,6 @@ int main()
 				Pollo.RenderModel();
 			}
 		}
-
 		//Conjunto 2
 		for (int i = 0; i < numAni; ++i) {
 
@@ -1165,7 +1240,7 @@ int main()
 				//Ubicacion de crab inicial
 				glm::vec3 crabPos = glm::vec3(480.0f, -0.5f, -29.5f);
 				
-				//Ubicacion de siguientes hongos
+				//Ubicacion de siguientes crabs
 				crabPos.x = crabPos.x + i * distanciaEntreCrab;
 				crabPos.z = crabPos.z + j * distanciaEntreCrab;
 
@@ -1176,7 +1251,6 @@ int main()
 				Crabmeat.RenderModel();
 			}
 		}
-
 		//Conjunto 2
 		for (int i = 0; i < numCrab+5; ++i) {
 
@@ -1186,7 +1260,7 @@ int main()
 				//Ubicacion de crab inicial
 				glm::vec3 crabPos = glm::vec3(-260.0f, -0.5f, 328.0f);
 
-				//Ubicacion de siguientes hongos
+				//Ubicacion de siguientes crabs
 				crabPos.x = crabPos.x + i * distanciaEntreCrab;
 				crabPos.z = crabPos.z + j * distanciaEntreCrab;
 
@@ -1374,7 +1448,6 @@ int main()
 		PalBall.RenderModel();
 
 		//Orbe Magico  (6)
-
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(479.0f, 4.0f+movVert, -22.0f + sin(glm::radians(movZigZag))));
 		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
@@ -1417,7 +1490,6 @@ int main()
 
 		//Baculo (11)
 		model = glm::mat4(1.0);
-		//model = glm::translate(model, glm::vec3(129.0f, -0.0f, -101.0f));
 		model = glm::translate(model, glm::vec3(305.0f, -1.0f, -75.7f));
 		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
 		model = glm::rotate(model, 33 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -1433,7 +1505,7 @@ int main()
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		banca1Texture.UseTexture();
 
-		meshList[4]->RenderMesh(); //indice dentro de la meshList (IMPORTANTE:cambiar si es necesario)
+		meshList[4]->RenderMesh();
 
 		glUseProgram(0);
 
