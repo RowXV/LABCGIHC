@@ -20,6 +20,46 @@ void Camera::keyControl(bool* keys, GLfloat deltaTime)
 {
 	GLfloat velocity = moveSpeed * deltaTime;
 
+	if (keys[GLFW_KEY_Z])
+	{
+		position -= right * velocity;
+	}
+
+	if (keys[GLFW_KEY_X])
+	{
+		position += right * velocity;
+	}
+}
+
+void Camera::keyControlSon(bool* keys, GLfloat deltaTime)
+{
+	GLfloat velocity = moveSpeed * deltaTime;
+
+	if (keys[GLFW_KEY_T])
+	{
+		position += front * velocity;
+	}
+
+	if (keys[GLFW_KEY_G])
+	{
+		position -= front * velocity;
+	}
+
+	if (keys[GLFW_KEY_F])
+	{
+		position -= right * velocity;
+	}
+
+	if (keys[GLFW_KEY_H])
+	{
+		position += right * velocity;
+	}
+}
+
+void Camera::keyControlDep(bool* keys, GLfloat deltaTime)
+{
+	GLfloat velocity = moveSpeed * deltaTime;
+
 	if (keys[GLFW_KEY_W])
 	{
 		position += front * velocity;

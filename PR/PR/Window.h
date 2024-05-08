@@ -13,7 +13,21 @@ public:
 	GLfloat getBufferHeight() { return bufferHeight; }
 	GLfloat getXChange();
 	GLfloat getYChange();
-	GLfloat getmuevex() { return muevex; }
+	
+	
+	//Movimientos personajes
+	//Depresso
+	GLfloat getgiroIzDepress() { return giroIzDepress; }
+	GLfloat getgiroDeDepress() { return giroDeDepress; }
+	GLfloat getmovDepress() { return movDepress; }
+	//Sonic
+	GLfloat getgiroIzSonic() { return giroIzSonic; }
+	GLfloat getgiroDeSonic() { return giroDeSonic; }
+	GLfloat getmovSonic() { return movSonic; }
+
+	//Camara
+	GLfloat getopcion() { return opcion; }
+
 	bool getShouldClose() {
 		return  glfwWindowShouldClose(mainWindow);}
 	bool* getsKeys() { return keys; }
@@ -30,7 +44,20 @@ private:
 	GLfloat lastY;
 	GLfloat xChange;
 	GLfloat yChange;
-	GLfloat muevex;
+	
+
+	//Movimiento Personajes
+	//Depresso
+	GLfloat giroIzDepress;
+	GLfloat giroDeDepress;
+	GLfloat movDepress;
+	//Sonic
+	GLfloat giroIzSonic;
+	GLfloat giroDeSonic;
+	GLfloat movSonic;
+	//Camara opcion
+	GLfloat opcion;
+
 	bool mouseFirstMoved;
 	static void ManejaTeclado(GLFWwindow* window, int key, int code, int action, int mode);
 	static void ManejaMouse(GLFWwindow* window, double xPos, double yPos);

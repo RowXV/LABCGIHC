@@ -13,7 +13,14 @@ Window::Window(GLint windowWidth, GLint windowHeight)
 {
 	width = windowWidth;
 	height = windowHeight;
-	muevex = 2.0f;
+	giroIzDepress = 0.0f;
+	giroDeDepress = 0.0f;
+	movDepress = 0.0f;
+	giroIzSonic = 0.0f;
+	giroDeSonic = 0.0f;
+	movSonic = 0.0f;
+	opcion = 0.0f;
+
 	for (size_t i = 0; i < 1024; i++)
 	{
 		keys[i] = 0;
@@ -104,15 +111,139 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	{
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	}
-	if (key == GLFW_KEY_Y)
+
+	//DEPRESSO
+	//Giros Depresso
+	if (key == GLFW_KEY_Q)
 	{
-		theWindow-> muevex += 1.0;
+		theWindow->giroIzDepress += 10.0;
 	}
-	if (key == GLFW_KEY_U)
+	if (key == GLFW_KEY_E)
 	{
-		theWindow-> muevex -= 1.0;
+		theWindow->giroDeDepress -= 10.0;
+	}
+	//Movimiento Depresso
+	if (key == GLFW_KEY_W)
+	{
+		static bool aumentando = true;
+		if (aumentando) {
+			// Si está aumentando y no ha alcanzado el límite superior, aumenta
+			if (theWindow->movDepress < 30.0) {
+				theWindow->movDepress += 5.0;
+			}
+			else {
+				// Si alcanza el límite superior, cambia la dirección
+				aumentando = false;
+			}
+		}
+		else {
+			// Si está disminuyendo y no ha alcanzado el límite inferior, disminuye
+			if (theWindow->movDepress > -30.0) {
+				theWindow->movDepress -= 5.0;
+			}
+			else {
+				// Si alcanza el límite inferior, cambia la dirección
+				aumentando = true;
+			}
+		}
+	}
+	if (key == GLFW_KEY_S)
+	{
+		static bool aumentando = true;
+		if (aumentando) {
+			// Si está aumentando y no ha alcanzado el límite superior, aumenta
+			if (theWindow->movDepress < 30.0) {
+				theWindow->movDepress += 5.0;
+			}
+			else {
+				// Si alcanza el límite superior, cambia la dirección
+				aumentando = false;
+			}
+		}
+		else {
+			// Si está disminuyendo y no ha alcanzado el límite inferior, disminuye
+			if (theWindow->movDepress > -30.0) {
+				theWindow->movDepress -= 5.0;
+			}
+			else {
+				// Si alcanza el límite inferior, cambia la dirección
+				aumentando = true;
+			}
+		}
 	}
 
+	//SONIC
+	//Giros Sonic
+	if (key == GLFW_KEY_R)
+	{
+		theWindow->giroIzSonic += 10.0;
+	}
+	if (key == GLFW_KEY_Y)
+	{
+		theWindow->giroDeSonic -= 10.0;
+	}
+	//Movimiento Sonic
+	if (key == GLFW_KEY_T)
+	{
+		static bool aumentando = true;
+		if (aumentando) {
+			// Si está aumentando y no ha alcanzado el límite superior, aumenta
+			if (theWindow->movSonic < 30.0) {
+				theWindow->movSonic += 5.0;
+			}
+			else {
+				// Si alcanza el límite superior, cambia la dirección
+				aumentando = false;
+			}
+		}
+		else {
+			// Si está disminuyendo y no ha alcanzado el límite inferior, disminuye
+			if (theWindow->movSonic > -30.0) {
+				theWindow->movSonic -= 5.0;
+			}
+			else {
+				// Si alcanza el límite inferior, cambia la dirección
+				aumentando = true;
+			}
+		}
+	}
+	if (key == GLFW_KEY_G)
+	{
+		static bool aumentando = true;
+		if (aumentando) {
+			// Si está aumentando y no ha alcanzado el límite superior, aumenta
+			if (theWindow->movSonic < 30.0) {
+				theWindow->movSonic += 5.0;
+			}
+			else {
+				// Si alcanza el límite superior, cambia la dirección
+				aumentando = false;
+			}
+		}
+		else {
+			// Si está disminuyendo y no ha alcanzado el límite inferior, disminuye
+			if (theWindow->movSonic > -30.0) {
+				theWindow->movSonic -= 5.0;
+			}
+			else {
+				// Si alcanza el límite inferior, cambia la dirección
+				aumentando = true;
+			}
+		}
+	}
+	//Opcion Camara
+	if (key == GLFW_KEY_1)
+	{
+		theWindow->opcion = 0.0;
+	}
+	if (key == GLFW_KEY_2)
+	{
+		theWindow->opcion = 1.0;
+	}
+	if (key == GLFW_KEY_3)
+	{
+		theWindow->opcion = 2.0;
+	}
 
 
 	if (key >= 0 && key < 1024)
