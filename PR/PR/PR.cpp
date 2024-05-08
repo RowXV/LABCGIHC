@@ -36,6 +36,34 @@ Proyecto
 #include "Material.h"
 const float toRadians = 3.14159265f / 180.0f;
 
+//Variables
+float terceraSonic = 25.0f; // Distancia de camara
+float terceraDepresso = 20.0f; // Distancia de camara
+
+int numAni = 3;//Animales por conjunto
+float anguloEntreAni = 90.0f; //Giro de animales
+
+float distanciaEntrePollos = 2.0f;//Espacio entre cada Pollo
+float distanciaEntreOvejas = 4.0f;//Espacio entre cada Oveja
+float distanciaEntreCrab = 3.0f;// Espacio entre cada crab
+float distanciaEntreFrutas = -10.0f;// Espacio entre cada fruta en el eje z
+float distanciaEntreHongos = -5.0f;// Espacio entre cada hongo en el eje x
+float distanciaEntrePalmeras = -25.0f;//Espacio entre cada palmera en el eje x
+
+int numCrab = 6;//6x6 = 36 crabmeats
+int numFrutas = 13;//Número de frutas a crear
+int numPalmeras = 27;//Número de palmeras a crear
+int numHongos = 92;// Número de Hongos a crear
+
+//Variables animacion
+float movZigZag = 0.0f;
+float movVert = 0.0f;
+float movOffset = 0.0f;
+bool dir = true;
+
+
+
+
 Window mainWindow;
 std::vector<Mesh*> meshList;
 std::vector<Shader> shaderList;
@@ -668,12 +696,37 @@ int main()
 	sp.init(); //inicializar esfera
 	sp.load();//enviar la esfera al shader
 
+	movOffset = 0.05f;
+	lastTime = glfwGetTime(); //Para empezar lo más cercano posible a 0
+
 	while (!mainWindow.getShouldClose())
 	{
 		GLfloat now = glfwGetTime();
 		deltaTime = now - lastTime;
 		deltaTime += (now - lastTime) / limitFPS;
 		lastTime = now;
+
+		//Algoritmos de animacion
+		movZigZag += 5.0f * deltaTime;
+
+		if (dir == true)
+		{
+			movVert += movOffset * deltaTime;
+			
+			if (movVert > 8.0f)
+			{
+				dir = false;
+			}
+		}
+		else if (dir == false)
+		{
+			movVert -= movOffset * deltaTime;
+			if (movVert < 0.0f)
+			{
+				dir = true;
+			}
+		}
+		
 
 		//Recibir eventos del usuario
 		glfwPollEvents();
@@ -815,8 +868,6 @@ int main()
 		//DEPRESSO
 		//Cuerpo
 		glm::vec3 camaraDepresso = depresso.getCameraDirection();
-		float terceraDepresso = 20.0f; // Distancia de camara
-
 		glm::vec3 depressoPos = depresso.getCameraPosition() + terceraDepresso * camaraDepresso;
 		depressoPos.y -= 6.0f;
 
@@ -829,7 +880,6 @@ int main()
 		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		DCu.RenderModel();
-
 
 		//Brazo Izquierdo
 		model = modelaux;
@@ -866,8 +916,6 @@ int main()
 		//SONIC
 		//Cuerpo
 		glm::vec3 camaraSonic = sonic.getCameraDirection();
-		float terceraSonic = 25.0f; // Distancia de camara
-
 		glm::vec3 sonicPos = sonic.getCameraPosition() + terceraSonic * camaraSonic;
 		sonicPos.y -= 8.0f;
 
@@ -875,7 +923,7 @@ int main()
 		model = glm::translate(model, sonicPos);
 		model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
 		model = glm::rotate(model, glm::radians(mainWindow.getgiroIzSonic()), glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, glm::radians(mainWindow.getgiroIzSonic()), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(mainWindow.getgiroDeSonic()), glm::vec3(0.0f, 1.0f, 0.0f));
 
 		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -1022,15 +1070,7 @@ int main()
 		MLl.RenderModel();
 
 		//*********************************************************************FAUNA**************************************************************************
-		//Animales por conjunto
-		int numAni = 3;
-		//Giro de animales
-		float anguloEntreAni = 90.0f;
-
 		//Pollos
-		//Espacio entre cada Pollo
-		float distanciaEntrePollos = 2.0f;
-
 		//Conjunto 1
 		for (int i = 0; i < numAni; ++i) {
 
@@ -1074,9 +1114,6 @@ int main()
 		}
 		
 		//Ovejas
-		//Espacio entre cada Oveja
-		float distanciaEntreOvejas = 4.0f;
-
 		//Conjunto 1
 		for (int i = 0; i < numAni; ++i) {
 
@@ -1119,10 +1156,6 @@ int main()
 		}
 
 		//Crabmeat
-		//6x6 = 36 crabmeats
-		int numCrab = 6;
-		// Espacio entre cada crab
-		float distanciaEntreCrab = 3.0f;
 		//Conjunto 1
 		for (int i = 0; i < numCrab; ++i) {
 
@@ -1167,11 +1200,6 @@ int main()
 		//**************************************************************************FLORA**************************************************************************
 
 		//FrutasHabilidad
-		//Número de frutas a crear
-		int numFrutas = 13;
-		// Espacio entre cada fruta en el eje z
-		float distanciaEntreFrutas = -10.0f;
-
 		for (int i = 0; i < numFrutas; ++i) {
 			
 			//Frutas Izquierda Camino
@@ -1205,11 +1233,6 @@ int main()
 		}
 
 		//Palmeras
-		//Número de palmeras a crear
-		int numPalmeras = 27;
-		//Espacio entre cada palmera en el eje x
-		float distanciaEntrePalmeras = -25.0f;
-
 		for (int i = 0; i < numPalmeras; ++i) {
 				//Palmeras Cruzando Calle
 				model = glm::mat4(1.0);
@@ -1257,11 +1280,6 @@ int main()
 		}
 
 		//Hongos
-		// Número de Hongos a crear
-		int numHongos = 92;
-		// Espacio entre cada hongo en el eje x
-		float distanciaEntreHongos = -5.0f;
-
 		for (int i = 0; i < numHongos; ++i) {
 			
 			//Hongos Antes Camino
@@ -1294,7 +1312,6 @@ int main()
 			}
 
 		}
-
 
 		//**************************************************************************OBJETOS**************************************************************************
 
@@ -1357,8 +1374,9 @@ int main()
 		PalBall.RenderModel();
 
 		//Orbe Magico  (6)
+
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(479.0f, 4.0f, -22.0f));
+		model = glm::translate(model, glm::vec3(479.0f, 4.0f+movVert, -22.0f + sin(glm::radians(movZigZag))));
 		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Orbe.RenderModel();

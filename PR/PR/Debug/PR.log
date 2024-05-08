@@ -5,6 +5,7 @@ C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Compu
 C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\Window.h(13,37): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
   (compilando archivo de origen "PR.cpp")
   
-C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\PR.cpp(673,15): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\PR.cpp(675,33): warning C4244: '+=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\PR.cpp(700,24): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\PR.cpp(704,15): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\PR.cpp(706,33): warning C4244: '+=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
   PR.vcxproj -> C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\Debug\PR.exe
