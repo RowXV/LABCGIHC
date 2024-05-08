@@ -19,13 +19,23 @@ Camera::Camera(glm::vec3 startPosition, glm::vec3 startUp, GLfloat startYaw, GLf
 void Camera::keyControl(bool* keys, GLfloat deltaTime)
 {
 	GLfloat velocity = moveSpeed * deltaTime;
+	glm::vec3 frontNoY = glm::normalize(glm::vec3(front.x, 0.0f, front.z)); // Eliminar componente Y de la dirección
 
-	if (keys[GLFW_KEY_Z])
+	if (keys[GLFW_KEY_I])
+	{
+		position += frontNoY * velocity;
+	}
+
+	if (keys[GLFW_KEY_K])
+	{
+		position -= frontNoY * velocity;
+	}
+	if (keys[GLFW_KEY_J])
 	{
 		position -= right * velocity;
 	}
 
-	if (keys[GLFW_KEY_X])
+	if (keys[GLFW_KEY_L])
 	{
 		position += right * velocity;
 	}
