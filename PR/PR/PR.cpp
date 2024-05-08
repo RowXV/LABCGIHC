@@ -40,8 +40,10 @@ Window mainWindow;
 std::vector<Mesh*> meshList;
 std::vector<Shader> shaderList;
 
+//Camaras
 Camera camera;
-
+Camera depresso;
+Camera sonic;
 
 //Texturas a utilizar en entorno opengl
 //Texture "nombre";
@@ -447,7 +449,9 @@ int main()
 	CrearBanca1();
 	CreateShaders();
 
-	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.3f, 0.5f);
+	camera = Camera(glm::vec3(0.0f, 200.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, -90.0f, 0.3f, 0.5f);
+	depresso = Camera(glm::vec3(-220.0f, 9.0f, 61.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 0.3f, 0.5f);
+	sonic = Camera(glm::vec3(201.0f, 10.0f, 27.0f), glm::vec3(0.0f, 1.0f, 0.0f), 180.0f, 0.0f, 0.3f, 0.5f);
 
 
 	//********************************CARGA DE TEXTURAS*************************************
@@ -673,13 +677,44 @@ int main()
 
 		//Recibir eventos del usuario
 		glfwPollEvents();
-		camera.keyControl(mainWindow.getsKeys(), deltaTime);
-		camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
 
+		//Camaras y controles asignados
+		if (mainWindow.getopcion() == 0.0f)
+		{
+			depresso.keyControlDep(mainWindow.getsKeys(), deltaTime);
+			depresso.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
+			
+		}
+		else if (mainWindow.getopcion() == 1.0f)
+		{
+			sonic.keyControlSon(mainWindow.getsKeys(), deltaTime);
+			sonic.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
+		}
+		else if (mainWindow.getopcion() == 2.0f)
+		{
+			camera.keyControl(mainWindow.getsKeys(), deltaTime);
+
+		}
+		
 		// Clear the window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		skybox.DrawSkybox(camera.calculateViewMatrix(), projection);
+		
+
+		if (mainWindow.getopcion() == 0.0f)
+		{
+			skybox.DrawSkybox(depresso.calculateViewMatrix(), projection);
+		}
+		else if (mainWindow.getopcion() == 1.0f)
+		{
+			skybox.DrawSkybox(sonic.calculateViewMatrix(), projection);
+		}
+		else if (mainWindow.getopcion() == 2.0f)
+		{
+			skybox.DrawSkybox(camera.calculateViewMatrix(), projection);
+		}
+
+
 		shaderList[0].UseShader();
 		uniformModel = shaderList[0].GetModelLocation();
 		uniformProjection = shaderList[0].GetProjectionLocation();
@@ -692,14 +727,31 @@ int main()
 		uniformShininess = shaderList[0].GetShininessLocation();
 
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
-		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
-		glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
+
+
+		if (mainWindow.getopcion() == 0.0f)
+		{
+			glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(depresso.calculateViewMatrix()));
+			glUniform3f(uniformEyePosition, depresso.getCameraPosition().x, depresso.getCameraPosition().y, depresso.getCameraPosition().z);
+		}
+		else if (mainWindow.getopcion() == 1.0f)
+		{
+			glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(sonic.calculateViewMatrix()));
+			glUniform3f(uniformEyePosition, sonic.getCameraPosition().x, sonic.getCameraPosition().y, sonic.getCameraPosition().z);
+		}
+		else if (mainWindow.getopcion() == 2.0f)
+		{
+			
+			glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
+			glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
+			//camera.getCameraDirection() = glm::vec3(0.0f, -1.0f, 0.0f);
+		}
 
 		// luz ligada a la cámara de tipo flash
 		//sirve para que en tiempo de ejecución (dentro del while) se cambien propiedades de la luz
-		glm::vec3 lowerLight = camera.getCameraPosition();
+		/*glm::vec3 lowerLight = camera.getCameraPosition();
 		lowerLight.y -= 0.3f;
-		spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
+		spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());*/
 
 		//información al shader de fuentes de iluminación
 		shaderList[0].SetDirectionalLight(&mainLight);
@@ -762,79 +814,103 @@ int main()
 		
 		//DEPRESSO
 		//Cuerpo
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-220.0f, 1.8f, 61.0f));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		modelaux = model;
+		glm::vec3 camaraDepresso = depresso.getCameraDirection();
+		float terceraDepresso = 20.0f; // Distancia de camara
 
+		glm::vec3 depressoPos = depresso.getCameraPosition() + terceraDepresso * camaraDepresso;
+		depressoPos.y -= 6.0f;
+
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, depressoPos);
+		model = glm::rotate(model, -180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(mainWindow.getgiroIzDepress()), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(mainWindow.getgiroDeDepress()), glm::vec3(0.0f, 1.0f, 0.0f));
+
+		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		DCu.RenderModel();
+
 
 		//Brazo Izquierdo
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(0.8f, 0.6f, 0.8f));
+		model = glm::rotate(model, glm::radians(mainWindow.getmovDepress()), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(mainWindow.getmovDepress()), glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		DBIz.RenderModel();
 
 		//Brazo Derecho
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(-0.6f, 0.6f, 0.9f));
+		model = glm::rotate(model, glm::radians(-mainWindow.getmovDepress()), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(-mainWindow.getmovDepress()), glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		DBDe.RenderModel();
 
 		//Pierna Izquierda
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(0.4f, -0.6f, 0.8f));
-		
+		model = glm::rotate(model, glm::radians(mainWindow.getmovDepress()), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(mainWindow.getmovDepress()), glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		DPIz.RenderModel();
 
 		//Pierna Derecha
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(-0.4f, -0.8f, 0.8f));
+		model = glm::rotate(model, glm::radians(-mainWindow.getmovDepress()), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(-mainWindow.getmovDepress()), glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		DPDe.RenderModel();
 
 		//SONIC
 		//Cuerpo
+		glm::vec3 camaraSonic = sonic.getCameraDirection();
+		float terceraSonic = 25.0f; // Distancia de camara
+
+		glm::vec3 sonicPos = sonic.getCameraPosition() + terceraSonic * camaraSonic;
+		sonicPos.y -= 8.0f;
+
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(201.0f, 3.6f, 27.0f));
-		//model = glm::translate(model, glm::vec3(mainWindow.getmovimiento(), 0.0f, 0.0f)); //para hacer que se mueva el personaje
+		model = glm::translate(model, sonicPos);
 		model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		model = glm::rotate(model, glm::radians(mainWindow.getgiroIzSonic()), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(mainWindow.getgiroIzSonic()), glm::vec3(0.0f, 1.0f, 0.0f));
+
+		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		SCu.RenderModel(); //variable con el modelo del cuerpo de la moto
-		modelaux = model;
+		
 
 		//Brazo izquierdo
 		model = modelaux; //reinicia la matriz auxiliar para la jerarquia
 		model = glm::translate(model, glm::vec3(0.1f, 0.4f, 0.8f));
-		//model = glm::rotate(model, glm::radians(mainWindow.getarticulacion1()), glm::vec3(0.0f, 0.0f, 1.0f)); //cambiar por otra articulación
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		model = glm::rotate(model, glm::radians(-mainWindow.getmovSonic()), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, glm::radians(-mainWindow.getmovSonic()), glm::vec3(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		SBIz.RenderModel();
 
 		//Brazo derecho
 		model = modelaux; //reinicia la matriz auxiliar para la jerarquia
 		model = glm::translate(model, glm::vec3(0.1f, 0.4f, -0.7f));
-		//model = glm::rotate(model, glm::radians(-mainWindow.getarticulacion1()), glm::vec3(0.0f, 0.0f, 1.0f)); //cambiar por otra articulación
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		model = glm::rotate(model, glm::radians(mainWindow.getmovSonic()), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, glm::radians(mainWindow.getmovSonic()), glm::vec3(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		SBDe.RenderModel();
 
 		//Pierna izquierda
 		model = modelaux; //reinicia la matriz auxiliar para la jerarquia
 		model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.3f));
-		//model = glm::rotate(model, glm::radians(-mainWindow.getarticulacion1()), glm::vec3(0.0f, 0.0f, 1.0f)); //cambiar por otra articulación
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		model = glm::rotate(model, glm::radians(mainWindow.getmovSonic()), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, glm::radians(mainWindow.getmovSonic()), glm::vec3(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		SPIz.RenderModel();
 
 		//Pierna derecha
 		model = modelaux; //reinicia la matriz auxiliar para la jerarquia
 		model = glm::translate(model, glm::vec3(0.0f, -1.0f, -0.3f));
-		//model = glm::rotate(model, glm::radians(mainWindow.getarticulacion1()), glm::vec3(0.0f, 0.0f, 1.0f)); //cambiar por otra articulación
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		model = glm::rotate(model, glm::radians(-mainWindow.getmovSonic()), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, glm::radians(-mainWindow.getmovSonic()), glm::vec3(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		SPDe.RenderModel();
 
