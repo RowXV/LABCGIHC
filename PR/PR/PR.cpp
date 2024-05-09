@@ -82,6 +82,10 @@ float rotllMoto;
 float rotllMotoOffset;
 bool dirMoto = true;
 
+float contaLuzMoto;
+float contaLuzMotoOffset;
+bool prendeLuzMoto;
+
 Window mainWindow;
 std::vector<Mesh*> meshList;
 std::vector<Shader> shaderList;
@@ -743,6 +747,11 @@ int main()
 	rotllBus = 0.0f;
 	rotllBusOffset = 3.5f;
 
+	//Apagado y prendido automático de la luz de la moto
+	contaLuzMoto = 0.0f;
+	contaLuzMotoOffset = 1.0;
+	prendeLuzMoto = true;
+
 	lastTime = glfwGetTime(); //Para empezar lo más cercano posible a 0
 
 	while (!mainWindow.getShouldClose())
@@ -835,6 +844,25 @@ int main()
 			{
 				dirBus = true;
 				giraBus = 0.0f;
+			}
+		}
+
+		//luz moto
+		//printf("contaLuzMoto = %.2f \n", contaLuzMoto); //impresion con el valor del contador de la luz de la moto
+		if (prendeLuzMoto == true)
+		{
+			contaLuzMoto -= contaLuzMotoOffset * deltaTime;
+			if (contaLuzMoto <= -100.0f)
+			{
+				prendeLuzMoto = false;
+			}
+		}
+		else
+		{
+			contaLuzMoto += contaLuzMotoOffset * deltaTime;
+			if (contaLuzMoto >= 0.0f)
+			{
+				prendeLuzMoto = true;
 			}
 		}
 		
@@ -944,7 +972,13 @@ int main()
 		else {
 			shaderList[0].SetPointLights(pointLights, pointLightCount-1);
 		}
-		shaderList[0].SetSpotLights(spotLights, spotLightCount);
+		if (prendeLuzMoto == true) {
+			shaderList[0].SetSpotLights(spotLights, spotLightCount);
+		}
+		else {
+			shaderList[0].SetSpotLights(spotLights, spotLightCount-1);
+		}
+		
 
 		glm::mat4 model(1.0);
 		glm::mat4 modelaux(1.0);
