@@ -661,15 +661,21 @@ int main()
 		0.3f, 0.3f,
 		0.0f, 0.0f, -1.0f);
 
+	//LUCES PUNTUALES
 	//Contador de luces puntuales
 	unsigned int pointLightCount = 0;
 
-	//LUCES PUNTUALES
-	//Luz de la joya
+	//*********************************+***LUZ DE LA JOYA*************************************
 	pointLights[0] = PointLight(0.3f, 0.3f, 1.0f,
 		0.0f, 1.0f,
 		244.0f, 15.0f, -114.0f, 
 		0.0075f, 0.005f, 0.0025f);
+	pointLightCount++;
+	//*********************************+***LUZ DEL ORO*************************************
+	pointLights[1] = PointLight(1.0f, 1.0f, 0.3f,
+		0.5f, 0.001f,
+		-417.0f, 3.0f, 232.0f,
+		0.75f, 0.005f, 0.01f);
 	pointLightCount++;
 
 	//LUCES SPOTLIGHT
