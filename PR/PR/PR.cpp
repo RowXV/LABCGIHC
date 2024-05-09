@@ -664,13 +664,15 @@ int main()
 	//Contador de luces puntuales
 	unsigned int pointLightCount = 0;
 
-	//Primera luz puntual
-	/*pointLights[0] = PointLight(1.0f, 0.0f, 0.0f,
+	//LUCES PUNTUALES
+	//Luz de la joya
+	pointLights[0] = PointLight(0.3f, 0.3f, 1.0f,
 		0.0f, 1.0f,
-		-6.0f, 1.5f, 1.5f,
-		0.3f, 0.2f, 0.1f);
-	pointLightCount++;*/
+		244.0f, 15.0f, -114.0f, 
+		0.0075f, 0.005f, 0.0025f);
+	pointLightCount++;
 
+	//LUCES SPOTLIGHT
 	//Contador de luces spotlight
 	unsigned int spotLightCount = 0;
 
@@ -691,7 +693,16 @@ int main()
 		1.0f, 0.0003f, 0.0002f,
 		15.0f);
 	spotLightCount++;
-	
+	//*********************************+***LUZ DEL VOCHO*************************************
+	spotLights[2] = SpotLight(1.0f, 0.3f, 0.3f,
+		1.0f, 2.0f,
+		0.0f, 0.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,
+		1.0f, 0.0003f, 0.0002f,
+		15.0f);
+	spotLightCount++;
+
+
 	//Continuar para más luces
 
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
@@ -893,7 +904,7 @@ int main()
 			spotLights[0].SetFlash(glm::vec3(movBus - 109.0f, 3.0f, 16.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		}
 
-
+		//Luces del Vocho
 		if (dirVoch) {
 			spotLights[1].SetFlash(glm::vec3(movVoch - 366.0f, 3.0f, -42.0f), glm::vec3(-1.0f, 0.0f, 0.0f));
 		}
@@ -901,7 +912,13 @@ int main()
 			spotLights[1].SetFlash(glm::vec3(movVoch - 346.0f, 3.0f, -42.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		}
 		
-
+		//Luces la moto
+		if (dirMoto) {
+			spotLights[2].SetFlash(glm::vec3(movMoto + 47.0f, 3.6f, -40.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		}
+		else {
+			spotLights[2].SetFlash(glm::vec3(movMoto + 47.0f, 3.6f, -40.0f), glm::vec3(-1.0f, 0.0f, 0.0f));
+		}
 
 		//información al shader de fuentes de iluminación
 		shaderList[0].SetDirectionalLight(&mainLight);
