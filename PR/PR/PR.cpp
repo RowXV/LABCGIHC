@@ -677,6 +677,13 @@ int main()
 		-417.0f, 3.0f, 232.0f,
 		0.75f, 0.005f, 0.01f);
 	pointLightCount++;
+	//*********************************+***LUZ DEL ORBE*************************************
+	pointLights[2] = PointLight(0.3f, 1.0f, 0.3f,
+		0.0f, 1.0f,
+		0.0f, 0.0f, 0.0f,
+		0.0075f, 0.01f, 0.005f);
+	pointLightCount++;
+
 
 	//LUCES SPOTLIGHT
 	//Contador de luces spotlight
@@ -925,6 +932,9 @@ int main()
 		else {
 			spotLights[2].SetFlash(glm::vec3(movMoto + 47.0f, 3.6f, -40.0f), glm::vec3(-1.0f, 0.0f, 0.0f));
 		}
+
+		//movimiento de la luz del orbe
+		pointLights[2].SetPLPos(glm::vec3(479.0f, 4.0f + movVert, -22.0f + 3.5*sin(glm::radians(movZigZag))));
 
 		//información al shader de fuentes de iluminación
 		shaderList[0].SetDirectionalLight(&mainLight);
@@ -1501,8 +1511,8 @@ int main()
 
 		//Orbe Magico  (6)
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(479.0f, 4.0f+movVert, -22.0f + sin(glm::radians(movZigZag))));
-		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		model = glm::translate(model, glm::vec3(479.0f, 4.0f+movVert, -22.0f + 3.5*sin(glm::radians(movZigZag))));
+		model = glm::scale(model, glm::vec3(8.0f, 8.0f, 8.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Orbe.RenderModel();
 
