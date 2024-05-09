@@ -938,7 +938,12 @@ int main()
 
 		//información al shader de fuentes de iluminación
 		shaderList[0].SetDirectionalLight(&mainLight);
-		shaderList[0].SetPointLights(pointLights, pointLightCount);
+		if (mainWindow.getOrbePrendido()) {
+			shaderList[0].SetPointLights(pointLights, pointLightCount);
+		}
+		else {
+			shaderList[0].SetPointLights(pointLights, pointLightCount-1);
+		}
 		shaderList[0].SetSpotLights(spotLights, spotLightCount);
 
 		glm::mat4 model(1.0);
