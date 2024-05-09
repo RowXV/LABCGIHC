@@ -643,12 +643,13 @@ int main()
 	Altar.LoadModel("Models/ModelosAle/Altar.obj");*/
 
 	std::vector<std::string> skyboxFaces;
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_rt.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_lf.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_dn.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_up.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_bk.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_ft.tga");
+
+	skyboxFaces.push_back("Textures/Skybox/skybox_3.tga"); //right
+	skyboxFaces.push_back("Textures/Skybox/skybox_1.tga"); //left
+	skyboxFaces.push_back("Textures/Skybox/skybox_6.tga"); //down
+	skyboxFaces.push_back("Textures/Skybox/skybox_5.tga"); //up
+	skyboxFaces.push_back("Textures/Skybox/skybox_2.tga"); //front
+	skyboxFaces.push_back("Textures/Skybox/skybox_4.tga"); //bh
 
 	skybox = Skybox(skyboxFaces);
 
@@ -674,13 +675,22 @@ int main()
 	unsigned int spotLightCount = 0;
 
 	//Primera luz Spotlight
-	/*potLights[0] = SpotLight(1.0f, 1.0f, 1.0f,
-		0.0f, 2.0f,
+	//*********************************+***LUZ DEL CARRO*************************************
+	spotLights[0] = SpotLight(0.3f, 0.3f, 1.0f,
+		1.0f, 2.0f,
 		0.0f, 0.0f, 0.0f,
-		0.0f, -1.0f, 0.0f,
 		1.0f, 0.0f, 0.0f,
-		5.0f);
-	spotLightCount++;*/
+		1.0f, 0.0003f, 0.0002f,
+		15.0f);
+	spotLightCount++;
+	//*********************************+***LUZ DEL VOCHO*************************************
+	spotLights[1] = SpotLight(1.0f, 1.0f, 0.3f,
+		1.0f, 2.0f,
+		0.0f, 0.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,
+		1.0f, 0.0003f, 0.0002f,
+		15.0f);
+	spotLightCount++;
 	
 	//Continuar para más luces
 
@@ -873,6 +883,25 @@ int main()
 			glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
 			glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 		}
+
+		//Movimiento de las luces
+		//Luces Bus
+		if (dirBus) {
+			spotLights[0].SetFlash(glm::vec3(movBus - 169.0f, 3.0f, 16.0f), glm::vec3(-1.0f, 0.0f, 0.0f));
+		}
+		else {
+			spotLights[0].SetFlash(glm::vec3(movBus - 109.0f, 3.0f, 16.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		}
+
+
+		if (dirVoch) {
+			spotLights[1].SetFlash(glm::vec3(movVoch - 366.0f, 3.0f, -42.0f), glm::vec3(-1.0f, 0.0f, 0.0f));
+		}
+		else {
+			spotLights[1].SetFlash(glm::vec3(movVoch - 346.0f, 3.0f, -42.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		}
+		
+
 
 		//información al shader de fuentes de iluminación
 		shaderList[0].SetDirectionalLight(&mainLight);
