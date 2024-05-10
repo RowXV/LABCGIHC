@@ -231,6 +231,15 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 			}
 		}
 	}
+	if (key == GLFW_KEY_O && action == GLFW_PRESS) //condicional para prender la luz del orbe
+	{
+		if (theWindow->orbePrendido == true) {
+			theWindow->orbePrendido = false;
+		}
+		else {
+			theWindow->orbePrendido = true;
+		}
+	}
 	//Opcion Camara
 	if (key == GLFW_KEY_1)
 	{
