@@ -86,6 +86,12 @@ float contaLuzMoto;
 float contaLuzMotoOffset;
 bool prendeLuzMoto;
 
+float solDirZ;
+float solDirY;
+float solDirYOffset;
+bool invierteCiclo;
+bool esDeDia;
+
 Window mainWindow;
 std::vector<Mesh*> meshList;
 std::vector<Shader> shaderList;
@@ -752,6 +758,14 @@ int main()
 	contaLuzMotoOffset = 1.0;
 	prendeLuzMoto = true;
 
+	//ciclo de dia y de noche
+	solDirZ = -1.0f;
+	solDirY = 0.0f;
+	solDirYOffset = 0.1f;
+	invierteCiclo = true;
+	esDeDia = true;
+
+
 	lastTime = glfwGetTime(); //Para empezar lo más cercano posible a 0
 
 	while (!mainWindow.getShouldClose())
@@ -760,6 +774,53 @@ int main()
 		deltaTime = now - lastTime;
 		deltaTime += (now - lastTime) / limitFPS;
 		lastTime = now;
+
+
+		//luz del sol
+		printf("solDirY = %.2f, solDirZ = %.2f, esDeDia = %d \n", solDirY/100, solDirZ, static_cast<int>(esDeDia)); //impresion con el valor del contador direccional del sol
+		if (esDeDia == true) { //es de día 
+			if (invierteCiclo == true)
+			{
+				solDirY -= solDirYOffset * deltaTime;
+				solDirZ = -1 - (solDirY / 100);
+				if (solDirY <= -100.0f)
+				{
+					invierteCiclo = false;
+				}
+			}
+			else
+			{
+				solDirY += solDirYOffset * deltaTime;
+				solDirZ = (-1 - (solDirY / 100)) * -1;
+				if (solDirY >= 0.0f)
+				{
+					invierteCiclo = true;
+					esDeDia = false;
+				}
+			}
+		}
+		else { //es de noche
+			if (invierteCiclo == true)
+			{
+				solDirY += solDirYOffset * deltaTime;
+				solDirZ = 1 - (solDirY / 100);
+				if (solDirY >= 100.0f)
+				{
+					invierteCiclo = false;
+				}
+			}
+			else
+			{
+				solDirY -= solDirYOffset * deltaTime;
+				solDirZ = (1 - (solDirY / 100)) * -1;
+				if (solDirY <= 0.0f)
+				{
+					invierteCiclo = true;
+					esDeDia = true;
+				}
+			}
+		}
+
 
 		//Algoritmos de animacion
 		//Animacion Compleja Orbe
@@ -960,6 +1021,8 @@ int main()
 		else {
 			spotLights[2].SetFlash(glm::vec3(movMoto + 47.0f, 3.6f, -40.0f), glm::vec3(-1.0f, 0.0f, 0.0f));
 		}
+
+		mainLight.SetDir(glm::vec3(0.0f, solDirY / 100, solDirZ));
 
 		//movimiento de la luz del orbe
 		pointLights[2].SetPLPos(glm::vec3(479.0f, 4.0f + movVert, -22.0f + 3.5*sin(glm::radians(movZigZag))));
