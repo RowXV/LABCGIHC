@@ -172,6 +172,7 @@ Model Altar;
 //Skybox a utilizar en entorno opengl
 //Skybox "nombre";
 Skybox skybox;
+Skybox skybox2;
 
 //Materiales a utilizar en entorno opengl
 //Material "nombre";
@@ -653,6 +654,7 @@ int main()
 	Altar.LoadModel("Models/ModelosAle/Altar.obj");*/
 
 	std::vector<std::string> skyboxFaces;
+	std::vector<std::string> skyboxFaces2;
 
 	skyboxFaces.push_back("Textures/Skybox/skybox_3.tga"); //right
 	skyboxFaces.push_back("Textures/Skybox/skybox_1.tga"); //left
@@ -661,7 +663,15 @@ int main()
 	skyboxFaces.push_back("Textures/Skybox/skybox_2.tga"); //front
 	skyboxFaces.push_back("Textures/Skybox/skybox_4.tga"); //bh
 
+	skyboxFaces2.push_back("Textures/Skybox/skybox_1.tga"); //right
+	skyboxFaces2.push_back("Textures/Skybox/skybox_2.tga"); //left
+	skyboxFaces2.push_back("Textures/Skybox/skybox_3.tga"); //down
+	skyboxFaces2.push_back("Textures/Skybox/skybox_4.tga"); //up
+	skyboxFaces2.push_back("Textures/Skybox/skybox_5.tga"); //front
+	skyboxFaces2.push_back("Textures/Skybox/skybox_6.tga"); //bh
+
 	skybox = Skybox(skyboxFaces);
+	skybox2 = Skybox(skyboxFaces2);
 
 	Material_brillante = Material(4.0f, 256);
 	Material_opaco = Material(0.3f, 4);
@@ -953,18 +963,35 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		//Para cambiar entre camaras
-		if (mainWindow.getopcion() == 0.0f)
-		{
-			skybox.DrawSkybox(depresso.calculateViewMatrix(), projection);
+		if (esDeDia) {
+			if (mainWindow.getopcion() == 0.0f)
+			{
+				skybox.DrawSkybox(depresso.calculateViewMatrix(), projection);
+			}
+			else if (mainWindow.getopcion() == 1.0f)
+			{
+				skybox.DrawSkybox(sonic.calculateViewMatrix(), projection);
+			}
+			else if (mainWindow.getopcion() == 2.0f)
+			{
+				skybox.DrawSkybox(camera.calculateViewMatrix(), projection);
+			}
 		}
-		else if (mainWindow.getopcion() == 1.0f)
-		{
-			skybox.DrawSkybox(sonic.calculateViewMatrix(), projection);
+		else {
+			if (mainWindow.getopcion() == 0.0f)
+			{
+				skybox2.DrawSkybox(depresso.calculateViewMatrix(), projection);
+			}
+			else if (mainWindow.getopcion() == 1.0f)
+			{
+				skybox2.DrawSkybox(sonic.calculateViewMatrix(), projection);
+			}
+			else if (mainWindow.getopcion() == 2.0f)
+			{
+				skybox2.DrawSkybox(camera.calculateViewMatrix(), projection);
+			}
 		}
-		else if (mainWindow.getopcion() == 2.0f)
-		{
-			skybox.DrawSkybox(camera.calculateViewMatrix(), projection);
-		}
+		
 
 		shaderList[0].UseShader();
 		uniformModel = shaderList[0].GetModelLocation();
