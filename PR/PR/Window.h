@@ -28,6 +28,9 @@ public:
 	//Camara
 	GLfloat getopcion() { return opcion; }
 
+	//Obre
+	GLfloat getOrbePrendido() { return orbePrendido;  }
+
 	bool getShouldClose() {
 		return  glfwWindowShouldClose(mainWindow);}
 	bool* getsKeys() { return keys; }
@@ -57,6 +60,8 @@ private:
 	GLfloat movSonic;
 	//Camara opcion
 	GLfloat opcion;
+	//Prendido del orbe
+	bool orbePrendido = true; //el orbe comienza prendido
 
 	bool mouseFirstMoved;
 	static void ManejaTeclado(GLFWwindow* window, int key, int code, int action, int mode);

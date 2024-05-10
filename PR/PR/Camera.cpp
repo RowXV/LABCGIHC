@@ -23,12 +23,12 @@ void Camera::keyControl(bool* keys, GLfloat deltaTime)
 
 	if (keys[GLFW_KEY_I])
 	{
-		position += frontNoY * velocity;
+		position -= frontNoY * velocity;
 	}
 
 	if (keys[GLFW_KEY_K])
 	{
-		position -= frontNoY * velocity;
+		position += frontNoY * velocity;
 	}
 	if (keys[GLFW_KEY_J])
 	{
