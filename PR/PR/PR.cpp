@@ -649,9 +649,9 @@ int main()
 
 	PLuna = Model();
 	PLuna.LoadModel("Models/ModelosAle/PLuna.obj");
-	/*
+	
 	Altar = Model();
-	Altar.LoadModel("Models/ModelosAle/Altar.obj");*/
+	Altar.LoadModel("Models/ModelosAle/Altar.obj");
 
 	std::vector<std::string> skyboxFaces;
 	std::vector<std::string> skyboxFaces2;
@@ -1117,8 +1117,20 @@ int main()
 		glDisable(GL_BLEND);
 
 		//ALTAR SOL
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-250.0f, 1.0f, -270.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		model = glm::rotate(model, 0 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Altar.RenderModel();
 
 		//ALTAR LUNA
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(50.0f, 1.0f, -270.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		model = glm::rotate(model, 0 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Altar.RenderModel();
 
 		//**************************************************************************PERSONAJES**************************************************************************
 		
