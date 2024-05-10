@@ -663,12 +663,12 @@ int main()
 	skyboxFaces.push_back("Textures/Skybox/skybox_2.tga"); //front
 	skyboxFaces.push_back("Textures/Skybox/skybox_4.tga"); //bh
 
-	skyboxFaces2.push_back("Textures/Skybox/skybox_1.tga"); //right
-	skyboxFaces2.push_back("Textures/Skybox/skybox_2.tga"); //left
-	skyboxFaces2.push_back("Textures/Skybox/skybox_3.tga"); //down
-	skyboxFaces2.push_back("Textures/Skybox/skybox_4.tga"); //up
-	skyboxFaces2.push_back("Textures/Skybox/skybox_5.tga"); //front
-	skyboxFaces2.push_back("Textures/Skybox/skybox_6.tga"); //bh
+	skyboxFaces2.push_back("Textures/Skybox/skybox_3_noche.tga"); //right
+	skyboxFaces2.push_back("Textures/Skybox/skybox_1_noche.tga"); //left
+	skyboxFaces2.push_back("Textures/Skybox/skybox_6_noche.tga"); //down
+	skyboxFaces2.push_back("Textures/Skybox/skybox_5_noche.tga"); //up
+	skyboxFaces2.push_back("Textures/Skybox/skybox_2_noche.tga"); //front
+	skyboxFaces2.push_back("Textures/Skybox/skybox_4_noche.tga"); //bh
 
 	skybox = Skybox(skyboxFaces);
 	skybox2 = Skybox(skyboxFaces2);
