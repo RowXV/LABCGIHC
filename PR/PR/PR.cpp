@@ -37,54 +37,79 @@ Proyecto
 const float toRadians = 3.14159265f / 180.0f;
 
 //Variables
-float terceraSonic = 25.0f; // Distancia de camara
-float terceraDepresso = 20.0f; // Distancia de camara
+float terceraSonic = 25.0f;				// Distancia de camara
+float terceraDepresso = 20.0f;			// Distancia de camara
 
-int numAni = 3;//Animales por conjunto
-float anguloEntreAni = 90.0f; //Giro de animales
+int numAni = 3;							//Animales por conjunto
+float anguloEntreAni = 90.0f;			//Giro de animales
 
-float distanciaEntrePollos = 2.0f;//Espacio entre cada Pollo
-float distanciaEntreOvejas = 4.0f;//Espacio entre cada Oveja
-float distanciaEntreCrab = 3.0f;// Espacio entre cada crab
-float distanciaEntreFrutas = -10.0f;// Espacio entre cada fruta en el eje z
-float distanciaEntreHongos = -5.0f;// Espacio entre cada hongo en el eje x
-float distanciaEntrePalmeras = -25.0f;//Espacio entre cada palmera en el eje x
+float distanciaEntrePollos = 2.0f;		//Espacio entre cada Pollo
+float distanciaEntreOvejas = 4.0f;		//Espacio entre cada Oveja
+float distanciaEntreCrab = 3.0f;		// Espacio entre cada crab
+float distanciaEntreFrutas = -10.0f;	// Espacio entre cada fruta en el eje z
+float distanciaEntreHongos = -5.0f;		// Espacio entre cada hongo en el eje x
+float distanciaEntrePalmeras = -25.0f;	//Espacio entre cada palmera en el eje x
 
-int numCrab = 6;//6x6 = 36 crabmeats
-int numFrutas = 13;//Número de frutas a crear
-int numPalmeras = 27;//Número de palmeras a crear
-int numHongos = 92;// Número de Hongos a crear
+int numCrab = 6;						//6x6 = 36 crabmeats
+int numFrutas = 13;						//Número de frutas a crear
+int numPalmeras = 27;					//Número de palmeras a crear calle
+int numPalmerasAltar = 5;				//5*5 = 25 Número de palmeras a crear Altar
+int numHongos = 92;						// Número de Hongos a crear
 
 //Variables animacion 
-float movZigZag = 0.0f;
-float movVert = 0.0f;
+//Animacion compleja Orbe
+float movZigZag = 0.0f;					//Movimiento en el eje z de Orbe
+float movVert = 0.0f;					//Movimiento en el eje y de Orbe
 float movOffset;
-bool dir = true;
+bool dir = true;						//Para cambiar la direccion en el eje y
 
-float movVoch;
+//Animacion Vocho
+float movVoch;							//Movimiento en el eje x de Vocho
 float movVochOffset;
-float giraVoch;
-float rotllVoch;
+float giraVoch;							//Para dar un giro de 180°
+float rotllVoch;						//Para las llantas
 float rotllVochOffset;
-bool dirVoch = true;
+bool dirVoch = true;					//Para cambiar la direccion en el eje x
 
-float movBus;
+//Animacion Bus
+float movBus;							//Movimiento en el eje x de bus
 float movBusOffset;
-float giraBus;
-float rotllBus;
+float giraBus;							//Para dar un giro de 180°
+float rotllBus;							//Para las llantas
 float rotllBusOffset;
-bool dirBus = true;
+bool dirBus = true;						//Para cambiar la direccion en el eje x
 
-float movMoto;
+//Animacion Moto
+float movMoto;							//Movimiento en el eje x de moto
 float movMotoOffset;
-float giraMoto;
-float rotllMoto;
+float giraMoto;							//Para dar un giro de 180°
+float rotllMoto;						//Para las llantas
 float rotllMotoOffset;
-bool dirMoto = true;
+bool dirMoto = true;					//Para cambiar la direccion en el eje x
 
-float contaLuzMoto;
+//Animacion basica MotoBug
+bool dirAnimBas;						//Direccion de motobug
+float movAnimBas;						//Movimiento de motobug
+float movAnimBasOffset = true;
+
+//Animacion basica Mineral
+float movAnimBas2;						//Movimiento de Mineral
+float movAnimBas2Offset = true;
+
+//Ciclos automaticos
+//Ciclo automatico Luz Moto
+float contaLuzMoto;						//Animacion de prendido y apagado Luz moto
 float contaLuzMotoOffset;
-bool prendeLuzMoto;
+bool prendeLuzMoto;						//Para definir si esta prendida o apagada
+
+//Ciclo dia y noche
+float solDirZ;							//Direccion en Z del sol
+float solDirY;							//Direccion en Y del sol
+float solDirYOffset;
+bool invierteCiclo;						//Para cambiar entre noche y dia
+bool esDeDia;							//Verificar si es de dia
+
+
 
 Window mainWindow;
 std::vector<Mesh*> meshList;
@@ -96,12 +121,15 @@ Camera depresso;
 Camera sonic;
 
 //Texturas a utilizar en entorno opengl
-//Texture "nombre";
-Texture pisoTexture;
-Texture banca1Texture; //textura de la banca
+Texture pisoTexture;	//Textura de piso
+Texture banca1Texture;	//Textura de la banca
 
 //Modelos a utilizar en entorno opengl
-//Model "nombre";
+
+//Edificaciones
+Model PSol;
+Model PLuna;
+Model Altar;
 
 //Objetos
 Model Lifmunk;
@@ -158,17 +186,12 @@ Model SBIz;
 Model SPDe;
 Model SPIz;
 
-//Edificaciones
-Model PSol;
-Model PLuna;
-Model Altar;
-
 //Skybox a utilizar en entorno opengl
-//Skybox "nombre";
+//Dos tipos para el dia y la noche
 Skybox skybox;
+Skybox skybox2;
 
 //Materiales a utilizar en entorno opengl
-//Material "nombre";
 Material Material_brillante;
 Material Material_opaco;
 
@@ -248,27 +271,6 @@ void CreateObjects()
 		10.0f, 0.0f, 10.0f,		1.0f, 0.0f,	0.0f, -1.0f, 0.0f	//3
 	};
 
-	unsigned int vegetacionIndices[] = {
-	   0, 1, 2,
-	   0, 2, 3,
-	   4,5,6,
-	   4,6,7
-	};
-
-	GLfloat vegetacionVertices[] = {
-		-0.5f, -0.5f, 0.0f,		0.0f, 0.0f,		0.0f, 0.0f, 0.0f,
-		0.5f, -0.5f, 0.0f,		1.0f, 0.0f,		0.0f, 0.0f, 0.0f,
-		0.5f, 0.5f, 0.0f,		1.0f, 1.0f,		0.0f, 0.0f, 0.0f,
-		-0.5f, 0.5f, 0.0f,		0.0f, 1.0f,		0.0f, 0.0f, 0.0f,
-
-		0.0f, -0.5f, -0.5f,		0.0f, 0.0f,		0.0f, 0.0f, 0.0f,
-		0.0f, -0.5f, 0.5f,		1.0f, 0.0f,		0.0f, 0.0f, 0.0f,
-		0.0f, 0.5f, 0.5f,		1.0f, 1.0f,		0.0f, 0.0f, 0.0f,
-		0.0f, 0.5f, -0.5f,		0.0f, 1.0f,		0.0f, 0.0f, 0.0f,
-
-
-	};
-	
 	Mesh *obj1 = new Mesh();
 	obj1->CreateMesh(vertices, indices, 32, 12);
 	meshList.push_back(obj1);
@@ -281,14 +283,7 @@ void CreateObjects()
 	obj3->CreateMesh(floorVertices, floorIndices, 32, 6);
 	meshList.push_back(obj3);
 
-	Mesh* obj4 = new Mesh();
-	obj4->CreateMesh(vegetacionVertices, vegetacionIndices, 64, 12);
-	meshList.push_back(obj4);
-
 	calcAverageNormals(indices, 12, vertices, 32, 8, 5);
-
-	calcAverageNormals(vegetacionIndices, 12, vegetacionVertices, 64, 8, 5);
-
 }
 
 //Creacion de banca con primitivas OpenGl
@@ -642,11 +637,12 @@ int main()
 
 	PLuna = Model();
 	PLuna.LoadModel("Models/ModelosAle/PLuna.obj");
-	/*
+	
 	Altar = Model();
-	Altar.LoadModel("Models/ModelosAle/Altar.obj");*/
+	Altar.LoadModel("Models/ModelosAle/Altar.obj");
 
 	std::vector<std::string> skyboxFaces;
+	std::vector<std::string> skyboxFaces2;
 
 	skyboxFaces.push_back("Textures/Skybox/skybox_3.tga"); //right
 	skyboxFaces.push_back("Textures/Skybox/skybox_1.tga"); //left
@@ -655,7 +651,15 @@ int main()
 	skyboxFaces.push_back("Textures/Skybox/skybox_2.tga"); //front
 	skyboxFaces.push_back("Textures/Skybox/skybox_4.tga"); //bh
 
+	skyboxFaces2.push_back("Textures/Skybox/skybox_3_noche.tga"); //right
+	skyboxFaces2.push_back("Textures/Skybox/skybox_1_noche.tga"); //left
+	skyboxFaces2.push_back("Textures/Skybox/skybox_6_noche.tga"); //down
+	skyboxFaces2.push_back("Textures/Skybox/skybox_5_noche.tga"); //up
+	skyboxFaces2.push_back("Textures/Skybox/skybox_2_noche.tga"); //front
+	skyboxFaces2.push_back("Textures/Skybox/skybox_4_noche.tga"); //bh
+
 	skybox = Skybox(skyboxFaces);
+	skybox2 = Skybox(skyboxFaces2);
 
 	Material_brillante = Material(4.0f, 256);
 	Material_opaco = Material(0.3f, 4);
@@ -719,7 +723,6 @@ int main()
 		15.0f);
 	spotLightCount++;
 
-
 	//Continuar para más luces
 
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
@@ -747,10 +750,26 @@ int main()
 	rotllBus = 0.0f;
 	rotllBusOffset = 3.5f;
 
+	//Variables para el movimiento de los motobugs y mineral
+	dirAnimBas = true;
+	movAnimBas = 0.0f;
+	movAnimBasOffset = 0.05f;
+
+	movAnimBas2 = 0.0f;
+	movAnimBas2Offset = 0.5f;
+
 	//Apagado y prendido automático de la luz de la moto
 	contaLuzMoto = 0.0f;
 	contaLuzMotoOffset = 1.0;
 	prendeLuzMoto = true;
+
+	//ciclo de dia y de noche
+	solDirZ = -1.0f;
+	solDirY = 0.0f;
+	solDirYOffset = 0.1f;
+	invierteCiclo = true;
+	esDeDia = true;
+
 
 	lastTime = glfwGetTime(); //Para empezar lo más cercano posible a 0
 
@@ -761,7 +780,74 @@ int main()
 		deltaTime += (now - lastTime) / limitFPS;
 		lastTime = now;
 
+		//luz del sol
+		//printf("solDirY = %.2f, solDirZ = %.2f, esDeDia = %d \n", solDirY/100, solDirZ, static_cast<int>(esDeDia)); //impresion con el valor del contador direccional del sol
+		if (esDeDia == true) { //es de día 
+			if (invierteCiclo == true)
+			{
+				solDirY -= solDirYOffset * deltaTime;
+				solDirZ = -1 - (solDirY / 100);
+				if (solDirY <= -100.0f)
+				{
+					invierteCiclo = false;
+				}
+			}
+			else
+			{
+				solDirY += solDirYOffset * deltaTime;
+				solDirZ = (-1 - (solDirY / 100)) * -1;
+				if (solDirY >= 0.0f)
+				{
+					invierteCiclo = true;
+					esDeDia = false;
+				}
+			}
+		}
+		else { //es de noche
+			if (invierteCiclo == true)
+			{
+				solDirY += solDirYOffset * deltaTime;
+				solDirZ = 1 - (solDirY / 100);
+				if (solDirY >= 100.0f)
+				{
+					invierteCiclo = false;
+				}
+			}
+			else
+			{
+				solDirY -= solDirYOffset * deltaTime;
+				solDirZ = (1 - (solDirY / 100)) * -1;
+				if (solDirY <= 0.0f)
+				{
+					invierteCiclo = true;
+					esDeDia = true;
+				}
+			}
+		}
+
+
 		//Algoritmos de animacion
+		// Animacion de los motobugs y gema
+		if (dirAnimBas == true)
+		{
+			movAnimBas += movAnimBasOffset * deltaTime;
+
+			if (movAnimBas > 15.0f)
+			{
+				dirAnimBas = false;
+			}
+		}
+		else if (dirAnimBas == false)
+		{
+			movAnimBas -= movAnimBasOffset * deltaTime;
+			if (movAnimBas < 0.0f)
+			{
+				dirAnimBas = true;
+			}
+		}
+		//Animacion Mineral
+		movAnimBas2 += movAnimBas2Offset * deltaTime;
+
 		//Animacion Compleja Orbe
 		movZigZag += 5.0f * deltaTime;
 		if (dir == true)
@@ -892,18 +978,35 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		//Para cambiar entre camaras
-		if (mainWindow.getopcion() == 0.0f)
-		{
-			skybox.DrawSkybox(depresso.calculateViewMatrix(), projection);
+		if (esDeDia) {
+			if (mainWindow.getopcion() == 0.0f)
+			{
+				skybox.DrawSkybox(depresso.calculateViewMatrix(), projection);
+			}
+			else if (mainWindow.getopcion() == 1.0f)
+			{
+				skybox.DrawSkybox(sonic.calculateViewMatrix(), projection);
+			}
+			else if (mainWindow.getopcion() == 2.0f)
+			{
+				skybox.DrawSkybox(camera.calculateViewMatrix(), projection);
+			}
 		}
-		else if (mainWindow.getopcion() == 1.0f)
-		{
-			skybox.DrawSkybox(sonic.calculateViewMatrix(), projection);
+		else {
+			if (mainWindow.getopcion() == 0.0f)
+			{
+				skybox2.DrawSkybox(depresso.calculateViewMatrix(), projection);
+			}
+			else if (mainWindow.getopcion() == 1.0f)
+			{
+				skybox2.DrawSkybox(sonic.calculateViewMatrix(), projection);
+			}
+			else if (mainWindow.getopcion() == 2.0f)
+			{
+				skybox2.DrawSkybox(camera.calculateViewMatrix(), projection);
+			}
 		}
-		else if (mainWindow.getopcion() == 2.0f)
-		{
-			skybox.DrawSkybox(camera.calculateViewMatrix(), projection);
-		}
+		
 
 		shaderList[0].UseShader();
 		uniformModel = shaderList[0].GetModelLocation();
@@ -960,6 +1063,8 @@ int main()
 		else {
 			spotLights[2].SetFlash(glm::vec3(movMoto + 47.0f, 3.6f, -40.0f), glm::vec3(-1.0f, 0.0f, 0.0f));
 		}
+
+		mainLight.SetDir(glm::vec3(0.0f, solDirY / 100, solDirZ));
 
 		//movimiento de la luz del orbe
 		pointLights[2].SetPLPos(glm::vec3(479.0f, 4.0f + movVert, -22.0f + 3.5*sin(glm::radians(movZigZag))));
@@ -1027,8 +1132,20 @@ int main()
 		glDisable(GL_BLEND);
 
 		//ALTAR SOL
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-250.0f, 1.0f, -270.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		model = glm::rotate(model, 0 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Altar.RenderModel();
 
 		//ALTAR LUNA
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(50.0f, 1.0f, -270.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		model = glm::rotate(model, 0 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Altar.RenderModel();
 
 		//**************************************************************************PERSONAJES**************************************************************************
 		
@@ -1386,7 +1503,7 @@ int main()
 			frutaPos.z = frutaPos.z + i * distanciaEntreFrutas;
 
 			model = glm::translate(model, frutaPos);
-			model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
+			model = glm::scale(model, glm::vec3(1.2f, 1.2f, 1.2f));
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 			FruHa.RenderModel();
 
@@ -1401,7 +1518,7 @@ int main()
 				frutaPos.z = frutaPos.z + i * distanciaEntreFrutas;
 
 				model = glm::translate(model, frutaPos);
-				model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
+				model = glm::scale(model, glm::vec3(1.2f, 1.2f, 1.2f));
 				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 				FruHa.RenderModel();
 			}
@@ -1409,18 +1526,19 @@ int main()
 
 		//Palmeras
 		for (int i = 0; i < numPalmeras; ++i) {
-				//Palmeras Cruzando Calle
-				model = glm::mat4(1.0);
-				//Ubicacion de Palmera inicial
-				glm::vec3 palPos = glm::vec3(175.0f, -0.75f, -83.0f);
+			//Palmeras Cruzando Calle
+			model = glm::mat4(1.0);
+			//Ubicacion de Palmera inicial
+			glm::vec3 palPos = glm::vec3(175.0f, -0.75f, -83.0f);
 
-				//Ubicacion de siguientes palmeras
-				palPos.x = palPos.x + i * distanciaEntrePalmeras;
+			//Ubicacion de siguientes palmeras
+			palPos.x = palPos.x + i * distanciaEntrePalmeras;
 
-				model = glm::translate(model, palPos);
-				model = glm::scale(model, glm::vec3(10.5f, 10.5f, 10.5f));
-				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-				Palmera.RenderModel();
+
+			model = glm::translate(model, palPos);
+			model = glm::scale(model, glm::vec3(10.5f, 10.5f, 10.5f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			Palmera.RenderModel();
 			
 			//Palmeras Antes Calle 
 			if (i < 17)
@@ -1454,6 +1572,46 @@ int main()
 			}
 		}
 
+		//Palmeras Atras altares
+		//Conjunto 1
+		for (int i = 0; i < numPalmerasAltar+35; ++i) {
+
+			for (int j = 0; j < numPalmerasAltar; ++j) {
+				model = glm::mat4(1.0);
+				//Ubicacion de Palmera inicial
+				glm::vec3 palPos = glm::vec3(-493.0f, -0.75f, -489.0f);
+
+				//Ubicacion de siguientes palmeras
+				palPos.x = palPos.x + i * (-distanciaEntrePalmeras);
+				palPos.z = palPos.z + j * (-distanciaEntrePalmeras);
+
+				model = glm::translate(model, palPos);
+				model = glm::scale(model, glm::vec3(10.5f, 10.5f, 10.5f));
+				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+				Palmera.RenderModel();
+			}
+		}
+
+		//Palmeras Atras Piramide Sol
+		//Conjunto 2
+		for (int i = 0; i < numPalmerasAltar + 35; ++i) {
+
+			for (int j = 0; j < numPalmerasAltar; ++j) {
+				model = glm::mat4(1.0);
+				//Ubicacion de Palmera inicial
+				glm::vec3 palPos = glm::vec3(-493.0f, -0.75f, 489.0f);
+
+				//Ubicacion de siguientes palmeras
+				palPos.x = palPos.x + i * (-distanciaEntrePalmeras);
+				palPos.z = palPos.z + j * distanciaEntrePalmeras;
+
+				model = glm::translate(model, palPos);
+				model = glm::scale(model, glm::vec3(10.5f, 10.5f, 10.5f));
+				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+				Palmera.RenderModel();
+			}
+		}
+
 		//Hongos
 		for (int i = 0; i < numHongos; ++i) {
 			
@@ -1466,7 +1624,7 @@ int main()
 			hongoPosB.x = hongoPosB.x + i * distanciaEntreHongos;
 
 			model = glm::translate(model, hongoPosB);
-			model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+			model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 			HongoM.RenderModel();
 
@@ -1481,7 +1639,7 @@ int main()
 				hongoPos.x = hongoPos.x + i * distanciaEntreHongos;
 
 				model = glm::translate(model, hongoPos);
-				model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+				model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
 				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 				HongoM.RenderModel();
 			}
@@ -1493,6 +1651,7 @@ int main()
 		//Mineral (1)
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(-248.0f, 29.3f, 300.0f));
+		model = glm::rotate(model, movAnimBas2 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Mineral.RenderModel();
 
@@ -1512,22 +1671,22 @@ int main()
 
 		//Motobug 1 Piramide Luna (4)
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(279.0f, -1.0f, -208.0f));
-		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		model = glm::translate(model, glm::vec3(279.0f, -1.0f, -208.0f+movAnimBas));
+		model = glm::scale(model, glm::vec3(6.0f, 6.0f, 6.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Motobug.RenderModel();
 
 		//Motobug 2 Pasando Calle
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-333.0f, -1.0f, -101.0f));
-		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		model = glm::translate(model, glm::vec3(-333.0f, -1.0f, -120.0f + movAnimBas));
+		model = glm::scale(model, glm::vec3(6.0f, 6.0f, 6.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Motobug.RenderModel();
 
 		//Motobug 3 Calle
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(6.0f, -1.0f, 66.0f));
-		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		model = glm::translate(model, glm::vec3(6.0f, -1.0f, 80.0f + movAnimBas));
+		model = glm::scale(model, glm::vec3(6.0f, 6.0f, 6.0f));
 		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Motobug.RenderModel();
@@ -1564,8 +1723,9 @@ int main()
 
 		//Joya  (8)
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(244.0f, -0.0f, -114.0f));
+		model = glm::translate(model, glm::vec3(244.0f, -0.0f, -114.0f)); 
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
 		glEnable(GL_BLEND);
@@ -1592,7 +1752,7 @@ int main()
 		//Baculo (11)
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(305.0f, -1.0f, -75.7f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
 		model = glm::rotate(model, 33 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Baculo.RenderModel();
@@ -1606,7 +1766,7 @@ int main()
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		banca1Texture.UseTexture();
 
-		meshList[4]->RenderMesh();
+		meshList[3]->RenderMesh();
 
 		glUseProgram(0);
 
