@@ -52,7 +52,8 @@ float distanciaEntrePalmeras = -25.0f;//Espacio entre cada palmera en el eje x
 
 int numCrab = 6;//6x6 = 36 crabmeats
 int numFrutas = 13;//Número de frutas a crear
-int numPalmeras = 27;//Número de palmeras a crear
+int numPalmeras = 27;//Número de palmeras a crear calle
+int numPalmerasAltar = 5;//5*5 = 25 Número de palmeras a crear Altar
 int numHongos = 92;// Número de Hongos a crear
 
 //Variables animacion 
@@ -794,9 +795,8 @@ int main()
 		deltaTime += (now - lastTime) / limitFPS;
 		lastTime = now;
 
-
 		//luz del sol
-		printf("solDirY = %.2f, solDirZ = %.2f, esDeDia = %d \n", solDirY/100, solDirZ, static_cast<int>(esDeDia)); //impresion con el valor del contador direccional del sol
+		//printf("solDirY = %.2f, solDirZ = %.2f, esDeDia = %d \n", solDirY/100, solDirZ, static_cast<int>(esDeDia)); //impresion con el valor del contador direccional del sol
 		if (esDeDia == true) { //es de día 
 			if (invierteCiclo == true)
 			{
@@ -1540,19 +1540,19 @@ int main()
 
 		//Palmeras
 		for (int i = 0; i < numPalmeras; ++i) {
-				//Palmeras Cruzando Calle
-				model = glm::mat4(1.0);
-				//Ubicacion de Palmera inicial
-				glm::vec3 palPos = glm::vec3(175.0f, -0.75f, -83.0f);
+			//Palmeras Cruzando Calle
+			model = glm::mat4(1.0);
+			//Ubicacion de Palmera inicial
+			glm::vec3 palPos = glm::vec3(175.0f, -0.75f, -83.0f);
 
-				//Ubicacion de siguientes palmeras
-				palPos.x = palPos.x + i * distanciaEntrePalmeras;
-				
+			//Ubicacion de siguientes palmeras
+			palPos.x = palPos.x + i * distanciaEntrePalmeras;
 
-				model = glm::translate(model, palPos);
-				model = glm::scale(model, glm::vec3(10.5f, 10.5f, 10.5f));
-				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-				Palmera.RenderModel();
+
+			model = glm::translate(model, palPos);
+			model = glm::scale(model, glm::vec3(10.5f, 10.5f, 10.5f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			Palmera.RenderModel();
 			
 			//Palmeras Antes Calle 
 			if (i < 17)
@@ -1585,112 +1585,45 @@ int main()
 				Palmera.RenderModel();
 			}
 		}
-		//Palmeras entre los altares
-		for (int i = 0; i < numPalmeras-15; ++i) {
-			//Palmeras Cruzando Calle
-			model = glm::mat4(1.0);
-			//Ubicacion de Palmera inicial
-			glm::vec3 palPos = glm::vec3(-40.0f, -0.75f, -140.0f);
 
-			//Ubicacion de siguientes palmeras
-			palPos.z = palPos.z + i * distanciaEntrePalmeras;
+		//Palmeras Atras altares
+		//Conjunto 1
+		for (int i = 0; i < numPalmerasAltar+35; ++i) {
 
+			for (int j = 0; j < numPalmerasAltar; ++j) {
+				model = glm::mat4(1.0);
+				//Ubicacion de Palmera inicial
+				glm::vec3 palPos = glm::vec3(-493.0f, -0.75f, -489.0f);
 
-			model = glm::translate(model, palPos);
-			model = glm::scale(model, glm::vec3(10.5f, 10.5f, 10.5f));
-			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-			Palmera.RenderModel();
+				//Ubicacion de siguientes palmeras
+				palPos.x = palPos.x + i * (-distanciaEntrePalmeras);
+				palPos.z = palPos.z + j * (-distanciaEntrePalmeras);
+
+				model = glm::translate(model, palPos);
+				model = glm::scale(model, glm::vec3(10.5f, 10.5f, 10.5f));
+				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+				Palmera.RenderModel();
+			}
 		}
-		for (int i = 0; i < numPalmeras - 15; ++i) {
-			
-			model = glm::mat4(1.0);
-			//Ubicacion de Palmera inicial
-			glm::vec3 palPos = glm::vec3(-80.0f, -0.75f, -160.0f);
 
-			//Ubicacion de siguientes palmeras
-			palPos.z = palPos.z + i * distanciaEntrePalmeras;
+		//Palmeras Atras Piramide Sol
+		//Conjunto 2
+		for (int i = 0; i < numPalmerasAltar + 35; ++i) {
 
+			for (int j = 0; j < numPalmerasAltar; ++j) {
+				model = glm::mat4(1.0);
+				//Ubicacion de Palmera inicial
+				glm::vec3 palPos = glm::vec3(-493.0f, -0.75f, 489.0f);
 
-			model = glm::translate(model, palPos);
-			model = glm::scale(model, glm::vec3(10.5f, 10.5f, 10.5f));
-			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-			Palmera.RenderModel();
-		}
-		for (int i = 0; i < numPalmeras - 15; ++i) {
-			
-			model = glm::mat4(1.0);
-			//Ubicacion de Palmera inicial
-			glm::vec3 palPos = glm::vec3(-120.0f, -0.75f, -140.0f);
+				//Ubicacion de siguientes palmeras
+				palPos.x = palPos.x + i * (-distanciaEntrePalmeras);
+				palPos.z = palPos.z + j * distanciaEntrePalmeras;
 
-			//Ubicacion de siguientes palmeras
-			palPos.z = palPos.z + i * distanciaEntrePalmeras;
-
-
-			model = glm::translate(model, palPos);
-			model = glm::scale(model, glm::vec3(10.5f, 10.5f, 10.5f));
-			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-			Palmera.RenderModel();
-		}
-		for (int i = 0; i < numPalmeras - 15; ++i) {
-			
-			model = glm::mat4(1.0);
-			//Ubicacion de Palmera inicial
-			glm::vec3 palPos = glm::vec3(200.0f, -0.75f, 140.0f);
-
-			//Ubicacion de siguientes palmeras
-			palPos.x = palPos.x + i * distanciaEntrePalmeras;
-
-
-			model = glm::translate(model, palPos);
-			model = glm::scale(model, glm::vec3(10.5f, 10.5f, 10.5f));
-			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-			Palmera.RenderModel();
-		}
-		//palmeras al lado del checkpoint
-		for (int i = 0; i < numPalmeras - 8; ++i) {
-			
-			model = glm::mat4(1.0);
-			//Ubicacion de Palmera inicial
-			glm::vec3 palPos = glm::vec3(370.0f, -0.75f, 340.0f);
-
-			//Ubicacion de siguientes palmeras
-			palPos.x = palPos.x + i * distanciaEntrePalmeras;
-
-
-			model = glm::translate(model, palPos);
-			model = glm::scale(model, glm::vec3(10.5f, 10.5f, 10.5f));
-			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-			Palmera.RenderModel();
-		}
-		for (int i = 0; i < numPalmeras - 8; ++i) {
-			
-			model = glm::mat4(1.0);
-			//Ubicacion de Palmera inicial
-			glm::vec3 palPos = glm::vec3(390.0f, -0.75f, 380.0f);
-
-			//Ubicacion de siguientes palmeras
-			palPos.x = palPos.x + i * distanciaEntrePalmeras;
-
-
-			model = glm::translate(model, palPos);
-			model = glm::scale(model, glm::vec3(10.5f, 10.5f, 10.5f));
-			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-			Palmera.RenderModel();
-		}
-		for (int i = 0; i < numPalmeras - 8; ++i) {
-			
-			model = glm::mat4(1.0);
-			//Ubicacion de Palmera inicial
-			glm::vec3 palPos = glm::vec3(370.0f, -0.75f, 420.0f);
-
-			//Ubicacion de siguientes palmeras
-			palPos.x = palPos.x + i * distanciaEntrePalmeras;
-
-
-			model = glm::translate(model, palPos);
-			model = glm::scale(model, glm::vec3(10.5f, 10.5f, 10.5f));
-			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-			Palmera.RenderModel();
+				model = glm::translate(model, palPos);
+				model = glm::scale(model, glm::vec3(10.5f, 10.5f, 10.5f));
+				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+				Palmera.RenderModel();
+			}
 		}
 
 		//Hongos
