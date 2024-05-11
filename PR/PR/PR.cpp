@@ -733,8 +733,6 @@ int main()
 	//Loop mientras no se cierra la ventana
 	
 	//Variables para animacion de vehiculos
-	movOffset = 0.05f;
-
 	movVoch=0.0f;
 	movVochOffset = 0.7f;
 	rotllVoch = 0.0f;
@@ -749,6 +747,9 @@ int main()
 	movBusOffset = 0.7f;
 	rotllBus = 0.0f;
 	rotllBusOffset = 3.5f;
+
+	//Variable animacion Orbe
+	movOffset = 0.05f;
 
 	//Variables para el movimiento de los motobugs y mineral
 	dirAnimBas = true;
@@ -781,7 +782,6 @@ int main()
 		lastTime = now;
 
 		//luz del sol
-		//printf("solDirY = %.2f, solDirZ = %.2f, esDeDia = %d \n", solDirY/100, solDirZ, static_cast<int>(esDeDia)); //impresion con el valor del contador direccional del sol
 		if (esDeDia == true) { //es de día 
 			if (invierteCiclo == true)
 			{
@@ -827,7 +827,7 @@ int main()
 
 
 		//Algoritmos de animacion
-		// Animacion de los motobugs y gema
+		// Animacion de los motobugs
 		if (dirAnimBas == true)
 		{
 			movAnimBas += movAnimBasOffset * deltaTime;
@@ -868,7 +868,7 @@ int main()
 			}
 		}
 		
-		//Animacion Basica Vehiculos
+		//Animacion Vehiculos
 		//Vocho
 		if (dirVoch == true)
 		{
@@ -934,7 +934,6 @@ int main()
 		}
 
 		//luz moto
-		//printf("contaLuzMoto = %.2f \n", contaLuzMoto); //impresion con el valor del contador de la luz de la moto
 		if (prendeLuzMoto == true)
 		{
 			contaLuzMoto -= contaLuzMotoOffset * deltaTime;
@@ -977,7 +976,7 @@ int main()
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		//Para cambiar entre camaras
+		//Para decidir que ven las camaras
 		if (esDeDia) {
 			if (mainWindow.getopcion() == 0.0f)
 			{
@@ -1021,7 +1020,7 @@ int main()
 
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
 
-		//Cambiar entre camaras y su posicion
+		//Cambiar entre camaras y guardar su posicion
 		if (mainWindow.getopcion() == 0.0f)
 		{
 			glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(depresso.calculateViewMatrix()));
@@ -1064,6 +1063,7 @@ int main()
 			spotLights[2].SetFlash(glm::vec3(movMoto + 47.0f, 3.6f, -40.0f), glm::vec3(-1.0f, 0.0f, 0.0f));
 		}
 
+		//Establecer direccion del sol 
 		mainLight.SetDir(glm::vec3(0.0f, solDirY / 100, solDirZ));
 
 		//movimiento de la luz del orbe
@@ -1077,6 +1077,7 @@ int main()
 		else {
 			shaderList[0].SetPointLights(pointLights, pointLightCount-1);
 		}
+
 		if (prendeLuzMoto == true) {
 			shaderList[0].SetSpotLights(spotLights, spotLightCount);
 		}
