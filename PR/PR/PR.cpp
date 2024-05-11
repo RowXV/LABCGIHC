@@ -37,65 +37,79 @@ Proyecto
 const float toRadians = 3.14159265f / 180.0f;
 
 //Variables
-float terceraSonic = 25.0f; // Distancia de camara
-float terceraDepresso = 20.0f; // Distancia de camara
+float terceraSonic = 25.0f;				// Distancia de camara
+float terceraDepresso = 20.0f;			// Distancia de camara
 
-int numAni = 3;//Animales por conjunto
-float anguloEntreAni = 90.0f; //Giro de animales
+int numAni = 3;							//Animales por conjunto
+float anguloEntreAni = 90.0f;			//Giro de animales
 
-float distanciaEntrePollos = 2.0f;//Espacio entre cada Pollo
-float distanciaEntreOvejas = 4.0f;//Espacio entre cada Oveja
-float distanciaEntreCrab = 3.0f;// Espacio entre cada crab
-float distanciaEntreFrutas = -10.0f;// Espacio entre cada fruta en el eje z
-float distanciaEntreHongos = -5.0f;// Espacio entre cada hongo en el eje x
-float distanciaEntrePalmeras = -25.0f;//Espacio entre cada palmera en el eje x
+float distanciaEntrePollos = 2.0f;		//Espacio entre cada Pollo
+float distanciaEntreOvejas = 4.0f;		//Espacio entre cada Oveja
+float distanciaEntreCrab = 3.0f;		// Espacio entre cada crab
+float distanciaEntreFrutas = -10.0f;	// Espacio entre cada fruta en el eje z
+float distanciaEntreHongos = -5.0f;		// Espacio entre cada hongo en el eje x
+float distanciaEntrePalmeras = -25.0f;	//Espacio entre cada palmera en el eje x
 
-int numCrab = 6;//6x6 = 36 crabmeats
-int numFrutas = 13;//Número de frutas a crear
-int numPalmeras = 27;//Número de palmeras a crear calle
-int numPalmerasAltar = 5;//5*5 = 25 Número de palmeras a crear Altar
-int numHongos = 92;// Número de Hongos a crear
+int numCrab = 6;						//6x6 = 36 crabmeats
+int numFrutas = 13;						//Número de frutas a crear
+int numPalmeras = 27;					//Número de palmeras a crear calle
+int numPalmerasAltar = 5;				//5*5 = 25 Número de palmeras a crear Altar
+int numHongos = 92;						// Número de Hongos a crear
 
 //Variables animacion 
-float movZigZag = 0.0f;
-float movVert = 0.0f;
+//Animacion compleja Orbe
+float movZigZag = 0.0f;					//Movimiento en el eje z de Orbe
+float movVert = 0.0f;					//Movimiento en el eje y de Orbe
 float movOffset;
-bool dir = true;
+bool dir = true;						//Para cambiar la direccion en el eje y
 
-float movVoch;
+//Animacion Vocho
+float movVoch;							//Movimiento en el eje x de Vocho
 float movVochOffset;
-float giraVoch;
-float rotllVoch;
+float giraVoch;							//Para dar un giro de 180°
+float rotllVoch;						//Para las llantas
 float rotllVochOffset;
-bool dirVoch = true;
+bool dirVoch = true;					//Para cambiar la direccion en el eje x
 
-float movBus;
+//Animacion Bus
+float movBus;							//Movimiento en el eje x de bus
 float movBusOffset;
-float giraBus;
-float rotllBus;
+float giraBus;							//Para dar un giro de 180°
+float rotllBus;							//Para las llantas
 float rotllBusOffset;
-bool dirBus = true;
+bool dirBus = true;						//Para cambiar la direccion en el eje x
 
-float movMoto;
+//Animacion Moto
+float movMoto;							//Movimiento en el eje x de moto
 float movMotoOffset;
-float giraMoto;
-float rotllMoto;
+float giraMoto;							//Para dar un giro de 180°
+float rotllMoto;						//Para las llantas
 float rotllMotoOffset;
-bool dirMoto = true;
+bool dirMoto = true;					//Para cambiar la direccion en el eje x
 
-float contaLuzMoto;
+//Animacion basica MotoBug
+bool dirAnimBas;						//Direccion de motobug
+float movAnimBas;						//Movimiento de motobug
+float movAnimBasOffset = true;
+
+//Animacion basica Mineral
+float movAnimBas2;						//Movimiento de Mineral
+float movAnimBas2Offset = true;
+
+//Ciclos automaticos
+//Ciclo automatico Luz Moto
+float contaLuzMoto;						//Animacion de prendido y apagado Luz moto
 float contaLuzMotoOffset;
-bool prendeLuzMoto;
+bool prendeLuzMoto;						//Para definir si esta prendida o apagada
 
-float solDirZ;
-float solDirY;
+//Ciclo dia y noche
+float solDirZ;							//Direccion en Z del sol
+float solDirY;							//Direccion en Y del sol
 float solDirYOffset;
-bool invierteCiclo;
-bool esDeDia;
+bool invierteCiclo;						//Para cambiar entre noche y dia
+bool esDeDia;							//Verificar si es de dia
 
-bool dirMotobug;
-float movMotobug;
-float movMotobugOffset = true;
+
 
 Window mainWindow;
 std::vector<Mesh*> meshList;
@@ -107,12 +121,15 @@ Camera depresso;
 Camera sonic;
 
 //Texturas a utilizar en entorno opengl
-//Texture "nombre";
-Texture pisoTexture;
-Texture banca1Texture; //textura de la banca
+Texture pisoTexture;	//Textura de piso
+Texture banca1Texture;	//Textura de la banca
 
 //Modelos a utilizar en entorno opengl
-//Model "nombre";
+
+//Edificaciones
+Model PSol;
+Model PLuna;
+Model Altar;
 
 //Objetos
 Model Lifmunk;
@@ -169,18 +186,12 @@ Model SBIz;
 Model SPDe;
 Model SPIz;
 
-//Edificaciones
-Model PSol;
-Model PLuna;
-Model Altar;
-
 //Skybox a utilizar en entorno opengl
-//Skybox "nombre";
+//Dos tipos para el dia y la noche
 Skybox skybox;
 Skybox skybox2;
 
 //Materiales a utilizar en entorno opengl
-//Material "nombre";
 Material Material_brillante;
 Material Material_opaco;
 
@@ -260,27 +271,6 @@ void CreateObjects()
 		10.0f, 0.0f, 10.0f,		1.0f, 0.0f,	0.0f, -1.0f, 0.0f	//3
 	};
 
-	unsigned int vegetacionIndices[] = {
-	   0, 1, 2,
-	   0, 2, 3,
-	   4,5,6,
-	   4,6,7
-	};
-
-	GLfloat vegetacionVertices[] = {
-		-0.5f, -0.5f, 0.0f,		0.0f, 0.0f,		0.0f, 0.0f, 0.0f,
-		0.5f, -0.5f, 0.0f,		1.0f, 0.0f,		0.0f, 0.0f, 0.0f,
-		0.5f, 0.5f, 0.0f,		1.0f, 1.0f,		0.0f, 0.0f, 0.0f,
-		-0.5f, 0.5f, 0.0f,		0.0f, 1.0f,		0.0f, 0.0f, 0.0f,
-
-		0.0f, -0.5f, -0.5f,		0.0f, 0.0f,		0.0f, 0.0f, 0.0f,
-		0.0f, -0.5f, 0.5f,		1.0f, 0.0f,		0.0f, 0.0f, 0.0f,
-		0.0f, 0.5f, 0.5f,		1.0f, 1.0f,		0.0f, 0.0f, 0.0f,
-		0.0f, 0.5f, -0.5f,		0.0f, 1.0f,		0.0f, 0.0f, 0.0f,
-
-
-	};
-	
 	Mesh *obj1 = new Mesh();
 	obj1->CreateMesh(vertices, indices, 32, 12);
 	meshList.push_back(obj1);
@@ -293,14 +283,7 @@ void CreateObjects()
 	obj3->CreateMesh(floorVertices, floorIndices, 32, 6);
 	meshList.push_back(obj3);
 
-	Mesh* obj4 = new Mesh();
-	obj4->CreateMesh(vegetacionVertices, vegetacionIndices, 64, 12);
-	meshList.push_back(obj4);
-
 	calcAverageNormals(indices, 12, vertices, 32, 8, 5);
-
-	calcAverageNormals(vegetacionIndices, 12, vegetacionVertices, 64, 8, 5);
-
 }
 
 //Creacion de banca con primitivas OpenGl
@@ -740,7 +723,6 @@ int main()
 		15.0f);
 	spotLightCount++;
 
-
 	//Continuar para más luces
 
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
@@ -768,10 +750,13 @@ int main()
 	rotllBus = 0.0f;
 	rotllBusOffset = 3.5f;
 
-	//Variables para el movimiento de los motobugs
-	dirMotobug = true;
-	movMotobug = 0.0f;
-	movMotobugOffset = 0.05f;
+	//Variables para el movimiento de los motobugs y mineral
+	dirAnimBas = true;
+	movAnimBas = 0.0f;
+	movAnimBasOffset = 0.05f;
+
+	movAnimBas2 = 0.0f;
+	movAnimBas2Offset = 0.5f;
 
 	//Apagado y prendido automático de la luz de la moto
 	contaLuzMoto = 0.0f;
@@ -842,25 +827,26 @@ int main()
 
 
 		//Algoritmos de animacion
-		// Animacion de los motobugs
-		if (dirMotobug == true)
+		// Animacion de los motobugs y gema
+		if (dirAnimBas == true)
 		{
-			movMotobug += movMotobugOffset * deltaTime;
+			movAnimBas += movAnimBasOffset * deltaTime;
 
-			if (movMotobug > 15.0f)
+			if (movAnimBas > 15.0f)
 			{
-				dirMotobug = false;
+				dirAnimBas = false;
 			}
 		}
-		else if (dirMotobug == false)
+		else if (dirAnimBas == false)
 		{
-			movMotobug -= movMotobugOffset * deltaTime;
-			if (movMotobug < 0.0f)
+			movAnimBas -= movAnimBasOffset * deltaTime;
+			if (movAnimBas < 0.0f)
 			{
-				dirMotobug = true;
+				dirAnimBas = true;
 			}
 		}
-
+		//Animacion Mineral
+		movAnimBas2 += movAnimBas2Offset * deltaTime;
 
 		//Animacion Compleja Orbe
 		movZigZag += 5.0f * deltaTime;
@@ -1665,6 +1651,7 @@ int main()
 		//Mineral (1)
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(-248.0f, 29.3f, 300.0f));
+		model = glm::rotate(model, movAnimBas2 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Mineral.RenderModel();
 
@@ -1684,21 +1671,21 @@ int main()
 
 		//Motobug 1 Piramide Luna (4)
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(279.0f, -1.0f, -208.0f+movMotobug));
+		model = glm::translate(model, glm::vec3(279.0f, -1.0f, -208.0f+movAnimBas));
 		model = glm::scale(model, glm::vec3(6.0f, 6.0f, 6.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Motobug.RenderModel();
 
 		//Motobug 2 Pasando Calle
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-333.0f, -1.0f, -120.0f + movMotobug));
+		model = glm::translate(model, glm::vec3(-333.0f, -1.0f, -120.0f + movAnimBas));
 		model = glm::scale(model, glm::vec3(6.0f, 6.0f, 6.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Motobug.RenderModel();
 
 		//Motobug 3 Calle
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(6.0f, -1.0f, 80.0f + movMotobug));
+		model = glm::translate(model, glm::vec3(6.0f, -1.0f, 80.0f + movAnimBas));
 		model = glm::scale(model, glm::vec3(6.0f, 6.0f, 6.0f));
 		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -1736,8 +1723,9 @@ int main()
 
 		//Joya  (8)
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(244.0f, -0.0f, -114.0f));
+		model = glm::translate(model, glm::vec3(244.0f, -0.0f, -114.0f)); 
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
 		glEnable(GL_BLEND);
@@ -1778,7 +1766,7 @@ int main()
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		banca1Texture.UseTexture();
 
-		meshList[4]->RenderMesh();
+		meshList[3]->RenderMesh();
 
 		glUseProgram(0);
 

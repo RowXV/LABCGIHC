@@ -22,6 +22,7 @@ void DirectionalLight::UseLight(GLfloat ambientIntensityLocation, GLfloat ambien
 	glUniform1f(diffuseIntensityLocation, diffuseIntensity);
 }
 
+//Direccion de Sol o DirectionalLight
 void DirectionalLight::SetDir(glm::vec3 dir)
 {
 	direction = dir;
