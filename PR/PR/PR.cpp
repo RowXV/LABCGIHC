@@ -92,6 +92,10 @@ float solDirYOffset;
 bool invierteCiclo;
 bool esDeDia;
 
+bool dirMotobug;
+float movMotobug;
+float movMotobugOffset = true;
+
 Window mainWindow;
 std::vector<Mesh*> meshList;
 std::vector<Shader> shaderList;
@@ -763,6 +767,11 @@ int main()
 	rotllBus = 0.0f;
 	rotllBusOffset = 3.5f;
 
+	//Variables para el movimiento de los motobugs
+	dirMotobug = true;
+	movMotobug = 0.0f;
+	movMotobugOffset = 0.05f;
+
 	//Apagado y prendido automático de la luz de la moto
 	contaLuzMoto = 0.0f;
 	contaLuzMotoOffset = 1.0;
@@ -833,6 +842,26 @@ int main()
 
 
 		//Algoritmos de animacion
+		// Animacion de los motobugs
+		if (dirMotobug == true)
+		{
+			movMotobug += movMotobugOffset * deltaTime;
+
+			if (movMotobug > 15.0f)
+			{
+				dirMotobug = false;
+			}
+		}
+		else if (dirMotobug == false)
+		{
+			movMotobug -= movMotobugOffset * deltaTime;
+			if (movMotobug < 0.0f)
+			{
+				dirMotobug = true;
+			}
+		}
+
+
 		//Animacion Compleja Orbe
 		movZigZag += 5.0f * deltaTime;
 		if (dir == true)
@@ -1488,7 +1517,7 @@ int main()
 			frutaPos.z = frutaPos.z + i * distanciaEntreFrutas;
 
 			model = glm::translate(model, frutaPos);
-			model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
+			model = glm::scale(model, glm::vec3(1.2f, 1.2f, 1.2f));
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 			FruHa.RenderModel();
 
@@ -1503,7 +1532,7 @@ int main()
 				frutaPos.z = frutaPos.z + i * distanciaEntreFrutas;
 
 				model = glm::translate(model, frutaPos);
-				model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
+				model = glm::scale(model, glm::vec3(1.2f, 1.2f, 1.2f));
 				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 				FruHa.RenderModel();
 			}
@@ -1518,6 +1547,7 @@ int main()
 
 				//Ubicacion de siguientes palmeras
 				palPos.x = palPos.x + i * distanciaEntrePalmeras;
+				
 
 				model = glm::translate(model, palPos);
 				model = glm::scale(model, glm::vec3(10.5f, 10.5f, 10.5f));
@@ -1555,6 +1585,113 @@ int main()
 				Palmera.RenderModel();
 			}
 		}
+		//Palmeras entre los altares
+		for (int i = 0; i < numPalmeras-15; ++i) {
+			//Palmeras Cruzando Calle
+			model = glm::mat4(1.0);
+			//Ubicacion de Palmera inicial
+			glm::vec3 palPos = glm::vec3(-40.0f, -0.75f, -140.0f);
+
+			//Ubicacion de siguientes palmeras
+			palPos.z = palPos.z + i * distanciaEntrePalmeras;
+
+
+			model = glm::translate(model, palPos);
+			model = glm::scale(model, glm::vec3(10.5f, 10.5f, 10.5f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			Palmera.RenderModel();
+		}
+		for (int i = 0; i < numPalmeras - 15; ++i) {
+			
+			model = glm::mat4(1.0);
+			//Ubicacion de Palmera inicial
+			glm::vec3 palPos = glm::vec3(-80.0f, -0.75f, -160.0f);
+
+			//Ubicacion de siguientes palmeras
+			palPos.z = palPos.z + i * distanciaEntrePalmeras;
+
+
+			model = glm::translate(model, palPos);
+			model = glm::scale(model, glm::vec3(10.5f, 10.5f, 10.5f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			Palmera.RenderModel();
+		}
+		for (int i = 0; i < numPalmeras - 15; ++i) {
+			
+			model = glm::mat4(1.0);
+			//Ubicacion de Palmera inicial
+			glm::vec3 palPos = glm::vec3(-120.0f, -0.75f, -140.0f);
+
+			//Ubicacion de siguientes palmeras
+			palPos.z = palPos.z + i * distanciaEntrePalmeras;
+
+
+			model = glm::translate(model, palPos);
+			model = glm::scale(model, glm::vec3(10.5f, 10.5f, 10.5f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			Palmera.RenderModel();
+		}
+		for (int i = 0; i < numPalmeras - 15; ++i) {
+			
+			model = glm::mat4(1.0);
+			//Ubicacion de Palmera inicial
+			glm::vec3 palPos = glm::vec3(200.0f, -0.75f, 140.0f);
+
+			//Ubicacion de siguientes palmeras
+			palPos.x = palPos.x + i * distanciaEntrePalmeras;
+
+
+			model = glm::translate(model, palPos);
+			model = glm::scale(model, glm::vec3(10.5f, 10.5f, 10.5f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			Palmera.RenderModel();
+		}
+		//palmeras al lado del checkpoint
+		for (int i = 0; i < numPalmeras - 8; ++i) {
+			
+			model = glm::mat4(1.0);
+			//Ubicacion de Palmera inicial
+			glm::vec3 palPos = glm::vec3(370.0f, -0.75f, 340.0f);
+
+			//Ubicacion de siguientes palmeras
+			palPos.x = palPos.x + i * distanciaEntrePalmeras;
+
+
+			model = glm::translate(model, palPos);
+			model = glm::scale(model, glm::vec3(10.5f, 10.5f, 10.5f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			Palmera.RenderModel();
+		}
+		for (int i = 0; i < numPalmeras - 8; ++i) {
+			
+			model = glm::mat4(1.0);
+			//Ubicacion de Palmera inicial
+			glm::vec3 palPos = glm::vec3(390.0f, -0.75f, 380.0f);
+
+			//Ubicacion de siguientes palmeras
+			palPos.x = palPos.x + i * distanciaEntrePalmeras;
+
+
+			model = glm::translate(model, palPos);
+			model = glm::scale(model, glm::vec3(10.5f, 10.5f, 10.5f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			Palmera.RenderModel();
+		}
+		for (int i = 0; i < numPalmeras - 8; ++i) {
+			
+			model = glm::mat4(1.0);
+			//Ubicacion de Palmera inicial
+			glm::vec3 palPos = glm::vec3(370.0f, -0.75f, 420.0f);
+
+			//Ubicacion de siguientes palmeras
+			palPos.x = palPos.x + i * distanciaEntrePalmeras;
+
+
+			model = glm::translate(model, palPos);
+			model = glm::scale(model, glm::vec3(10.5f, 10.5f, 10.5f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			Palmera.RenderModel();
+		}
 
 		//Hongos
 		for (int i = 0; i < numHongos; ++i) {
@@ -1568,7 +1705,7 @@ int main()
 			hongoPosB.x = hongoPosB.x + i * distanciaEntreHongos;
 
 			model = glm::translate(model, hongoPosB);
-			model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+			model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 			HongoM.RenderModel();
 
@@ -1583,7 +1720,7 @@ int main()
 				hongoPos.x = hongoPos.x + i * distanciaEntreHongos;
 
 				model = glm::translate(model, hongoPos);
-				model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+				model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
 				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 				HongoM.RenderModel();
 			}
@@ -1614,22 +1751,22 @@ int main()
 
 		//Motobug 1 Piramide Luna (4)
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(279.0f, -1.0f, -208.0f));
-		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		model = glm::translate(model, glm::vec3(279.0f, -1.0f, -208.0f+movMotobug));
+		model = glm::scale(model, glm::vec3(6.0f, 6.0f, 6.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Motobug.RenderModel();
 
 		//Motobug 2 Pasando Calle
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-333.0f, -1.0f, -101.0f));
-		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		model = glm::translate(model, glm::vec3(-333.0f, -1.0f, -120.0f + movMotobug));
+		model = glm::scale(model, glm::vec3(6.0f, 6.0f, 6.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Motobug.RenderModel();
 
 		//Motobug 3 Calle
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(6.0f, -1.0f, 66.0f));
-		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		model = glm::translate(model, glm::vec3(6.0f, -1.0f, 80.0f + movMotobug));
+		model = glm::scale(model, glm::vec3(6.0f, 6.0f, 6.0f));
 		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Motobug.RenderModel();
@@ -1694,7 +1831,7 @@ int main()
 		//Baculo (11)
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(305.0f, -1.0f, -75.7f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
 		model = glm::rotate(model, 33 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Baculo.RenderModel();
