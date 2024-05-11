@@ -1,22 +1,8 @@
-﻿  Camera.cpp
-  DirectionalLight.cpp
-  Light.cpp
+﻿  DirectionalLight.cpp
 C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\DirectionalLight.cpp(18,14): warning C4244: 'argumento': conversión de 'GLfloat' a 'GLint'; posible pérdida de datos
 C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\DirectionalLight.cpp(19,14): warning C4244: 'argumento': conversión de 'GLfloat' a 'GLint'; posible pérdida de datos
 C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\DirectionalLight.cpp(21,14): warning C4244: 'argumento': conversión de 'GLfloat' a 'GLint'; posible pérdida de datos
 C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\DirectionalLight.cpp(22,14): warning C4244: 'argumento': conversión de 'GLfloat' a 'GLint'; posible pérdida de datos
-  Material.cpp
-  Mesh_tn.cpp
-  Model.cpp
-C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\Model.cpp(16,10): warning C4477: 'printf' : la cadena de formato '%s' requiere un argumento de tipo 'char *', pero el argumento variádico 1 tiene el tipo 'const std::string'
-C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\Model.cpp(16,80): warning C4474: "printf": se pasaron demasiados argumentos para la cadena de formato
-  C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\Model.cpp(16,80):
-  los marcadores de posición y sus parámetros esperan 1 argumentos variádicos, pero se proporcionaron 2
-  
-C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\Model.cpp(51,7): warning C4804: '<': uso no seguro del tipo 'bool' en la operación
-C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\Model.cpp(51,21): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\Model.cpp(138,14): warning C4477: 'printf' : la cadena de formato '%s' requiere un argumento de tipo 'char *', pero el argumento variádico 1 tiene el tipo 'std::string'
-C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\Model.cpp(147,14): warning C4477: 'printf' : la cadena de formato '%s' requiere un argumento de tipo 'char *', pero el argumento variádico 1 tiene el tipo 'std::string'
   PR.cpp
 C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\Window.h(12,36): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
   (compilando archivo de origen "PR.cpp")
@@ -24,9 +10,9 @@ C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Compu
 C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\Window.h(13,37): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
   (compilando archivo de origen "PR.cpp")
   
-C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\PR.cpp(755,24): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\PR.cpp(759,15): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\PR.cpp(761,33): warning C4244: '+=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\PR.cpp(774,24): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\PR.cpp(778,15): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\PR.cpp(780,33): warning C4244: '+=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
   PointLight.cpp
 C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\PointLight.cpp(28,14): warning C4244: 'argumento': conversión de 'GLfloat' a 'GLint'; posible pérdida de datos
 C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\PointLight.cpp(29,14): warning C4244: 'argumento': conversión de 'GLfloat' a 'GLint'; posible pérdida de datos
@@ -48,11 +34,7 @@ C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Compu
 C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\Shader_light.cpp(218,88): warning C4244: 'argumento': conversión de 'GLuint' a 'GLfloat'; posible pérdida de datos
 C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\Shader_light.cpp(218,42): warning C4244: 'argumento': conversión de 'GLuint' a 'GLfloat'; posible pérdida de datos
   Skybox.cpp
-  Sphere.cpp
-C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\Sphere.cpp(39,13): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\Sphere.cpp(43,16): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
   SpotLight.cpp
-  Texture.cpp
   Window.cpp
 C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\Window.h(12,36): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
   (compilando archivo de origen "Window.cpp")
@@ -68,5 +50,6 @@ C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Compu
 C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\Window.cpp(288,21): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
   Generando código...
 C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\PR\Window.cpp(82,1): warning C4715: 'Window::Initialise': no todas las rutas de acceso de control devuelven un valor
+  LINK : no se encontró C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\Debug\PR.exe o no lo generó el último vínculo incremental; ejecutando vínculo completo
 LINK : warning LNK4098: la biblioteca predeterminada'MSVCRT' entra en conflicto con otras bibliotecas; use la biblioteca /NODEFAULTLIB:biblioteca
   PR.vcxproj -> C:\Users\axel2\OneDrive - Facultad de Ingeniería UNAM\8 - Octavo Semestre\Computacion Grafica\Lab\Proyecto\ReposPro\PR\Debug\PR.exe

@@ -28,7 +28,7 @@ public:
 	//Camara
 	GLfloat getopcion() { return opcion; }
 
-	//Obre
+	//Orbe
 	GLfloat getOrbePrendido() { return orbePrendido;  }
 
 	bool getShouldClose() {

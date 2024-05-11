@@ -15,6 +15,7 @@ public:
 		GLfloat diffuseIntensityLocation, GLfloat positionLocation,
 		GLfloat constantLocation, GLfloat linearLocation, GLfloat exponentLocation);
 	
+	//Se agrega para dar posicion a pointlight
 	void SetPLPos(glm::vec3 pos);
 
 	~PointLight();
