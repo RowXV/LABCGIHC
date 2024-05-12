@@ -1138,7 +1138,11 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		model = glm::rotate(model, 0 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		Altar.RenderModel();
+		glDisable(GL_BLEND);
 
 		//ALTAR LUNA
 		model = glm::mat4(1.0);
@@ -1146,7 +1150,11 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		model = glm::rotate(model, 0 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		Altar.RenderModel();
+		glDisable(GL_BLEND);
 
 		//**************************************************************************PERSONAJES**************************************************************************
 		
